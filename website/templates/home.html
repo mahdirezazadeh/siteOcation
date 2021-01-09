@@ -1,0 +1,37 @@
+{% extends "main_base.html" %}
+
+{% block content %}
+<h1>siteocation Home</h1>
+  <p>Welcome to siteocation, a website developed by <em>Parsa, Ardavan, Mahdi</em>!</p>
+  <h2>Dynamic content</h2>
+  <p>The siteocation has the following record counts:</p>
+  <ul>
+    <li><strong>Websites:</strong> {{ num_websites }}</li>
+    <li><strong>Worldwide websites:</strong> {{ num_worldwide_websites }}</li>
+    <li><strong>Users:</strong> {{ num_users }}</li>
+  </ul>
+{% for comment in comments %}
+    <div>
+        <p>
+            ______________________________________________________________________________________________________________
+        </p>
+        <h2>
+            <a href="{{ comment.website_id.get_absolute_url }}">
+                <img src="{{comment.website_id.brand_picture}}">
+                {{ comment.website_id }}
+            </a>
+        </h2>
+        <h1>
+            <a href="{{ comment.user_id.get_absolute_url }}">
+                @{{ comment.user_id.id }}
+            </a>
+        </h1>
+        <p dir="ltr">
+            {{ comment.comment }}
+            <br>
+            <br>
+            ______________________________________________________________________________________________________________
+        </p>
+    </div>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "main_base.html" %}
+{% block title %}<title>user detail</title>{% endblock %}
+{% block content %}
+    <h1>user detail.</h1>
+    <h2>
+        id: {{ user.id }}
+    </h2>
+    {% for comment in comments %}
+        <a href="{{ comment.website_id.get_absolute_url }}">{{ comment.website_id.website_domain_name }}</a>
+        <br>
+        <a href="{{ comment.user_id.get_absolute_url }}">{{ comment.user_id.id }}</a>
+        <br>
+          <p>{{ comment.comment }}</p>
+        <br>
+        <br>
+        <br>
+    {% endfor %}
+{% endblock %}

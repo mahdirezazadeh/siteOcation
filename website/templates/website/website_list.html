@@ -1,0 +1,19 @@
+{% extends "main_base.html" %}
+{% load static %}
+{% block title %}<title>Websites List</title>{% endblock %}
+{% block content %}
+  <h1>Websites List</h1>
+  <ul>
+    {% for website in website_list %}
+      <li>
+        <a href="{{ website.get_absolute_url }}">{{ website.name }}</a>
+        <br>
+        <p>{% for ind in website.industry.all %}
+          {{ ind.name }},
+          {% endfor %}
+        </p>
+      </li>
+      <br>
+    {% endfor %}
+  </ul>
+{% endblock %}
