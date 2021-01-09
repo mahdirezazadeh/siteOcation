@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    {% block title %}<title>siteOcation</title>{% endblock %}
+    <style>
+body {font-family: 'Poppins', sans-serif; margin: 0;}
+
+
+/* Full-width input fields */
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+    font-family: 'Poppins';
+}
+
+/* Set a style for all buttons */
+button {
+    font-weight: bold;
+  border-radius: 25px;
+  background-color: #ffffff;
+  color: #FCA311;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+    font-family: 'Poppins';
+}
+
+button:hover {
+  opacity: 0.8;
+}
+label{
+    font-family: 'Poppins';
+    color: #010101;
+    opacity: 70%;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  width: auto;
+  padding: 10px 18px;
+  background-color: #f1f1f1;
+}
+
+.Header{
+    font-family: 'Poppins';
+    padding: -10px 0px 10px 10px;
+    background-color: #E5E5E5;
+    height: 100px;
+}
+
+/* Center the image and position the close button */
+.imgcontainer {
+  text-align: center;
+  margin: 24px 0 12px 0;
+  position: relative;
+}
+
+img.avatar {
+  width: 40%;
+  border-radius: 50%;
+}
+
+.container {
+    position: relative;
+  padding: 16px;
+    background-color: #f1f1f1;
+}
+
+.fpp{
+    alignment: center;
+    font-size: 1rem;
+}
+
+span.psw {
+    font-family: 'Poppins';
+  float: right;
+  padding-top: 16px;
+}
+
+/* The Modal (background) */
+.modal {
+    font-family: 'Poppins';
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+/* Modal Content/Box */
+.modal-content {
+    font-family: 'Poppins';
+  box-shadow: 5px 5px #888888;
+  background-color: #fefefe;
+  margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+  border: 1px solid #888;
+  width: 40%; /* Could be more or less, depending on screen size */
+}
+
+::placeholder{
+    font-family: 'Poppins';
+  color: #010101;
+}
+
+input{
+    font-family: 'Poppins';
+    border: #010101;
+    border-radius: 25px;
+}
+
+input[type=text] {
+    font-family: 'Poppins';
+  background-color: #f1f1f1;
+  color: #010101;
+  font-weight: bold;
+    opacity: 50%;
+}
+
+input[type=password] {
+    font-family: 'Poppins';
+  font-weight: bold;
+  background-color: #f1f1f1;
+  color: #010101;
+    opacity: 50%;
+}
+
+/* Add Zoom Animation */
+.animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<div class="Header">
+    <div style="width: 100%;">
+        <div style="float: left; width: 40%">
+        <button onclick="document.getElementById('login').style.display='block'"
+                style="margin: 40px 5px 40px 30px; width: auto;">
+            Login
+        </button>
+        <button onclick="document.getElementById('createAccount').style.display='block'"
+                style="margin: 15px 5px 15px 15px; width: auto; ">
+            Create Account
+        </button>
+        </div>
+        <div style="float: right; width: 40%">
+            <a href="{% url 'websites' %}">
+            <button style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                Websites
+            </button>
+            </a>
+            <a href="/contact/">
+                <button style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                    Contact
+                </button>
+            </a>
+            <a href="/about/">
+                <button style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                    About
+                </button>
+            </a>
+            <a href="{% url 'home' %}">
+                <button style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                Home
+            </button>
+        </a>
+        </div>
+        <img style="margin: 15px 0px 15px 0px;" src="/media/image/logo/Asset%206@1x.png">
+    </div>
+    <div id="createAccount" class="modal">
+      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/login.py" method="post">
+        <div style="border-radius: 20px 20px 0px 0px;" class="container">
+
+          <label for="uname" style="float: left; width: 47%;"><b>Username</b></label>
+          <label for="email" style="float: right; width: 47%;"><b>Email</b></label>
+          <input style="width: 47%; float: left" type="text" placeholder="Enter Username" name="uname" required>
+          <input style="width: 47%; float: right" type="text" placeholder="Enter Email" name="email" required>
+
+          <hr style="width: 100%; position: relative"><br>
+
+          <label for="name" style="float: left; width: 47%;"><b>Name</b></label>
+          <label for="LName" style="float: right; width: 47%;"><b>LastName</b></label><br>
+          <input style="width: 47%; float: left" type="text" placeholder="Enter Name" name="name" required>
+          <input style="width: 47%; float: right" type="text" placeholder="Enter LastName" name="LName" required>
+
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+
+          <label for="psw"><b>Confirm Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+
+          <button type="submit">Creat</button>
+          <label>
+              <input type="checkbox" checked="checked" name="remember"><b> Remember me</b>
+          </label>
+        </div>
+
+        <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
+          <button type="button" onclick="document.getElementById('createAccount').style.display='none'" class="cancelbtn">
+              Cancel
+          </button>
+          <button type="button" onclick="document.getElementById('login').style.display='block' ,
+          document.getElementById('createAccount').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
+              Already Have An Account?
+          </button>
+        </div>
+      </form>
+    </div>
+    <div id="login" class="modal">
+      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/login.py" method="post">
+        <div style="border-radius: 20px 20px 0px 0px;" class="container">
+          <label for="uname"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="uname" required>
+
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+
+          <button type="submit">Login</button>
+          <label>
+            <input style="color: #f1f1f1;" type="checkbox" checked="checked" name="remember"> Remember me
+          </label>
+        </div>
+
+        <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc">
+            <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbtn">
+              Cancel
+          </button>
+            <div style="float:right;">
+            <button type="button" onclick="document.getElementById('createAccount').style.display='block' ,
+          document.getElementById('login').style.display='none'" style="width: auto;">
+              Join SiteOcation
+          </button>
+                </div>
+        </div>
+      </form>
+    </div>
+</div>
+
+<div class="col-sm-10 ">{% block content %}{% endblock %}
+
+  {% block pagination %}
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="{{ request.path }}?page={{ page_obj.previous_page_number }}">previous</a>
+                {% endif %}
+                <span class="page-current">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="{{ request.path }}?page={{ page_obj.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+  {% endblock %} </div>
+    </div>
+  </div>
+
+</body>
+</html>
