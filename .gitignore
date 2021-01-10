@@ -1,0 +1,3 @@
+db.sqlite3
+siteOcation/__pycache__/*.pyc
+website/__pycache__/*.pyc
