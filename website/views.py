@@ -14,6 +14,9 @@ from website.models import Comment
 def home(request):
     """View function for home page of site."""
 
+    # Is user logged in?
+    is_logged = request.session.get('is_logged', False)
+
     # Generate counts of some of the main objects
     num_websites = Website.objects.all().count()
 
@@ -33,6 +36,7 @@ def home(request):
         'num_users': num_users,
         # 'websites': websites,
         'comments': comments,
+        'is_logged': is_logged,
     }
 
     # Render the HTML template index.html with the data in the context variable
