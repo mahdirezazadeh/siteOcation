@@ -3,16 +3,35 @@
 {% block content %}
     <h1>user detail.</h1>
     <h2>
-        id: {{ user.id }}
+        id: {{ user.username }}
     </h2>
+    <h3>
+        bio: {{ detail.bio }}
+    </h3>
     {% for comment in comments %}
-        <a href="{{ comment.website_id.get_absolute_url }}">{{ comment.website_id.website_domain_name }}</a>
-        <br>
-        <a href="{{ comment.user_id.get_absolute_url }}">{{ comment.user_id.id }}</a>
-        <br>
-          <p>{{ comment.comment }}</p>
-        <br>
-        <br>
-        <br>
+        <div>
+            <p>
+                ______________________________________________________________________________________________________________
+            </p>
+            <h2>
+                <a href="{{ comment.website_id.get_absolute_url }}">
+                    <img src="{{comment.website_id.brand_picture}}">
+                    {{ comment.website_id }}
+                </a>
+            </h2>
+            <h1>
+                <a href="{{ comment.user_id.get_absolute_url }}">
+                    @{{ comment.user_id.user.username }}
+                </a>
+            </h1>
+            <p dir="ltr">
+                {{ comment.comment }}
+                <br>
+                <br>
+                ______________________________________________________________________________________________________________
+            </p>
+        </div>
     {% endfor %}
+
+
 {% endblock %}
