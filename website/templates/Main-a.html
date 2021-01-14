@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>SiteOcation</title>
+    <style>
+body {
+    background: url(../../media/image/BackGround/BG.png) repeat fixed center;
+    font-family: 'Poppins', sans-serif; margin: 0;
+    margin: 0px;
+    background-color: #f1f1f1;
+}
+
+.like{
+  font-size: 25px;
+  background-color: #333333;
+  border: none;
+  cursor: pointer;
+  color: #888888;
+}
+
+.like1{
+  font-size: 25px;
+  background-color: #333333;
+  border: none;
+    color: #888888;
+}
+
+.like:hover {
+    color: #a90b0b;
+    background-color: #333333;
+}
+
+.like-count{
+    position: absolute;
+    margin-left: 18.5%;
+    margin-top: 10px;
+    color: #888888;
+}
+
+.dislike-count{
+    position: absolute;
+    margin-left: 27%;
+    margin-top: 10px;
+    color: #888888;
+}
+
+.prev, .next {
+  margin-top: 25px;
+  cursor: pointer;
+  position: absolute;
+  width: auto;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 10px;
+  user-select: none;
+  text-decoration: none;
+  margin-left: 0.5%;
+}
+
+.next {
+  margin-left: 46.5%;
+}
+
+.prev:hover, .next:hover {
+  background-color: #FCA311;
+}
+
+a.prev:hover, a.next:hover{
+    color: #333333;
+}
+
+.Comment{
+    font-size: large;
+    font-weight: bold;
+    padding: 20px 0px;
+    color: #888888;
+}
+
+.most{
+    color: #FCA311;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.mySlides{
+    padding: 15px 10px;
+    border-radius: 25px;
+    text-align: center;
+    background-color: #333333;
+    margin: 20% 0px 0px 0px;
+}
+
+.mySlides2{
+    padding: 15px 10px;
+    border-radius: 25px;
+    text-align: center;
+    background-color: #333333;
+    margin: 20% 0px 0px 0px;
+}
+
+.website-tag-comment{
+    color: #888888;
+    font-size: larger;
+    font-weight: bolder;
+    text-decoration: none;
+    padding: 0px;
+}
+
+.website-tag-comment:hover{
+    color: #FCA311;
+}
+
+.p-comment{
+    text-align: center;
+    color: #888888;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+    font-family: 'Poppins';
+}
+
+.button {
+  font-weight: bold;
+  border-radius: 25px;
+  background-color: #ffffff;
+  color: #FCA311;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-family: 'Poppins';
+}
+
+button:link, button:visited {
+  background-color: #E5E5E5;
+  color: #FCA311;
+  border: 2px solid #FCA311;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+button:hover, button:active {
+  background-color: #FCA311;
+  color: #E5E5E5;
+}
+
+.a:link, .a:visited {
+  background-color: #E5E5E5;
+  color: #FCA311;
+  border: 2px solid #FCA311;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.a:hover, .a:active {
+  background-color: #FCA311;
+  color: #E5E5E5;
+}
+
+a{
+    border-radius: 25px;
+    height: auto;
+    width: auto;
+    padding: 14px 20px;
+    font-size: small;
+}
+
+.kharab{
+    padding: 0px;
+}
+
+label{
+    font-family: 'Poppins';
+    color: #010101;
+    opacity: 70%;
+}
+
+.cancelbtn {
+    font-weight: bold;
+  border-radius: 25px;
+  color: #FCA311;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  background-color: #f1f1f1;
+}
+
+.logo{
+    margin: 15px 10px 15px 20px;
+    padding-left: 10px;
+    width: 19%;
+    height: auto;
+}
+
+.Header{
+    font-family: 'Poppins';
+    padding: -10px 0px 10px 10px;
+    background-color: #E5E5E5;
+    height: 120px;
+    width: 100%;
+}
+
+.Body{
+    font-family: 'Poppins';
+    padding: -10px 0px 10px 10px;
+    height: 1000px;
+    width: 100%;
+}
+
+.Footer{
+    font-family: 'Poppins';
+    padding: -10px 0px 10px 10px;
+    background-color: #d6d6d6;
+    height: 120px;
+    width: 100%;
+    margin: 0px;
+}
+
+.developers{
+    font-family: 'Poppins';
+    color: #FCA311;
+    text-align: center;
+    font-size: large;
+    font-weight: bold;
+}
+
+.container {
+    position: relative;
+  padding: 16px;
+    background-color: #f1f1f1;
+}
+
+.modal {
+    font-family: 'Poppins';
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  padding-top: 60px;
+}
+
+.modal-content {
+    font-family: 'Poppins';
+  box-shadow: 5px 5px #888888;
+  background-color: #fefefe;
+  margin: 5% auto 15% auto;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+::placeholder{
+    font-family: 'Poppins';
+  color: #010101;
+}
+
+input{
+    font-family: 'Poppins';
+    border: #010101;
+    border-radius: 25px;
+}
+
+input[type=text] {
+    font-family: 'Poppins';
+  background-color: #f1f1f1;
+  color: #010101;
+  font-weight: bold;
+    opacity: 50%;
+}
+
+input[type=password] {
+    font-family: 'Poppins';
+  font-weight: bold;
+  background-color: #f1f1f1;
+  color: #010101;
+    opacity: 50%;
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="Header">
+    <div style="width: 100%;">
+        <div style="float: left; width: 40%">
+        <button class="button" onclick="document.getElementById('login').style.display='block'"
+                style="margin: 40px 5px 40px 30px; width: auto;">
+            Login
+        </button>
+        <button class="button" onclick="document.getElementById('createAccount').style.display='block'"
+                style="margin: 15px 5px 15px 15px; width: auto; ">
+            Create Account
+        </button>
+        </div>
+        <div style="float: right; width: 35%">
+        <a class="kharab" href="/contact/">
+            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                Contact
+            </button>
+        </a>
+        <a class="kharab" href="/about/">
+            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                About
+            </button>
+        </a>
+        <a class="kharab" href="/main/">
+            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+            Home
+            </button>
+        </a>
+        </div>
+        <img class="logo" src="/media/image/logo/Asset%206@1x.png">
+    </div>
+    <div id="createAccount" class="modal">
+      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/login.py" method="post">
+        <div style="border-radius: 20px 20px 0px 0px;" class="container">
+
+          <label for="uname" style="float: left; width: 47%;"><b>Username</b></label>
+          <label for="email" style="float: right; width: 47%;"><b>Email</b></label>
+          <input style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Username" name="uname" required>
+          <input style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Email" name="email" required>
+
+          <label for="name" style="float: left; width: 47%;"><b>Name</b></label>
+          <label for="LName" style="float: right; width: 47%;"><b>LastName</b></label><br>
+          <input style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Name" name="name" required>
+          <input style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter LastName" name="LName" required>
+
+          <label for="psw"><b>Password</b></label>
+          <input style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>
+
+          <label for="psw"><b>Confirm Password</b></label>
+          <input style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>
+
+          <button class="button" type="submit">Creat</button>
+          <label>
+              <input type="checkbox" checked="checked" name="remember"><b> Remember me</b>
+          </label>
+        </div>
+
+        <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
+          <button type="button" onclick="document.getElementById('createAccount').style.display='none'" class="cancelbtn">
+              Cancel
+          </button>
+          <button class="button" type="button" onclick="document.getElementById('login').style.display='block' ,
+          document.getElementById('createAccount').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
+              Already Have An Account?
+          </button>
+        </div>
+      </form>
+    </div>
+    <div id="login" class="modal">
+      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/login.py" method="post">
+        <div style="border-radius: 20px 20px 0px 0px;" class="container">
+          <label for="uname"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="uname" required>
+
+          <label for="psw"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="psw" required>
+
+          <button class="button" type="submit">Login</button>
+          <label>
+            <input style="color: #f1f1f1;" type="checkbox" checked="checked" name="remember"> Remember me
+          </label>
+        </div>
+
+        <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc">
+            <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbtn">
+              Cancel
+          </button>
+            <div style="float:right;">
+            <button class="button" type="button" onclick="document.getElementById('createAccount').style.display='block' ,
+          document.getElementById('login').style.display='none'" style="width: auto;">
+              Join SiteOcation
+          </button>
+                </div>
+        </div>
+      </form>
+    </div>
+</div>
+<div class="Body">
+    <div style="width: 50%; margin-left: 25%;" class="w3-content">
+
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+        <div class="mySlides">
+            <p class="most">Most Recent Comments</p>
+            <a class="website-tag-comment" href="apple">@Amazon</a>
+            <H2 class="Comment">User Name</H2>
+            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment ha</p>
+            <div>
+                <p class="like-count">3265</p>
+                <p class="dislike-count">3265</p>
+                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                <button class="like"><span class="fa fa-thumbs-down"></span></button>
+            </div>
+        </div>
+
+        <div class="mySlides">
+            <p class="most">Most Recent Comments</p>
+            <a class="website-tag-comment" href="apple">@Google</a>
+            <H2 class="Comment">User Name2</H2>
+            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment ha harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment ha</p>
+            <div>
+                <p class="like-count">3265</p>
+                <p class="dislike-count">3265</p>
+                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                <button class="like"><span class="fa fa-thumbs-down"></span></button>
+            </div>
+        </div>
+
+        <div class="mySlides">
+            <p class="most">Most Recent Comments</p>
+            <a class="website-tag-comment" href="apple">@Apple</a>
+            <H2 class="Comment">User Name3</H2>
+            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid tarin comment ha</p>
+            <div>
+                <p class="like-count">3265</p>
+                <p class="dislike-count">3265</p>
+                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                <button class="like"><span class="fa fa-thumbs-down"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 50%; margin-left: 25%;" class="w3-content">
+        <a class="prev" onclick="plusSlides1(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides1(1)">&#10095;</a>
+
+        <div class="mySlides2">
+            <p class="most">Most Liked Comments</p>
+            <a class="website-tag-comment" href="apple">@Google</a>
+            <H2 class="Comment">User Name2</H2>
+            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment ha harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment ha</p>
+            <div>
+                <p class="like-count">3265</p>
+                <p class="dislike-count">3265</p>
+                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                <button class="like"><span class="fa fa-thumbs-down"></span></button>
+            </div>
+        </div>
+
+        <div class="mySlides2">
+            <p class="most">Most Liked Comments</p>
+            <a class="website-tag-comment" href="apple">@Apple</a>
+            <H2 class="Comment">User Name3</H2>
+            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid tarin comment ha</p>
+            <div>
+                <p class="like-count">3265</p>
+                <p class="dislike-count">3265</p>
+                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                <button class="like"><span class="fa fa-thumbs-down"></span></button>
+            </div>
+        </div>
+
+        <div class="mySlides2">
+            <p class="most">Most Liked Comments</p>
+            <a class="website-tag-comment" href="apple">@Amazon</a>
+            <H2 class="Comment">User Name</H2>
+            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
+                tarin comment ha</p>
+            <div>
+                <p class="like-count">3265</p>
+                <p class="dislike-count">3265</p>
+                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                <button class="like"><span class="fa fa-thumbs-down"></span></button>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="Footer row">
+    <div class="align-self-center developers">
+        2020 Created By SiteOcation Group
+    </div>
+    <div style="position: absolute; padding-top: 40px;" class="align-self-right developers">
+        <a class="a" style="float: right; margin-left: 10px;" href="contact.html">Contact Us</a>
+        <a class="a" style="float: right;" href="about.html">About Us</a>
+    </div>
+</div>
+
+<script>
+        var slideIndex = 0;
+        carousel();
+
+        function carousel() {
+          var i;
+          var x = document.getElementsByClassName("mySlides");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+          }
+          slideIndex++;
+          if (slideIndex > x.length) {slideIndex = 1}
+          x[slideIndex-1].style.display = "block";
+          setTimeout(carousel, 7000);
+        }
+        var slideIndex1 = 1;
+        showSlides(slideIndex1);
+
+        function plusSlides(n) {
+          showSlides(slideIndex1 += n);
+        }
+
+        function currentSlide(n) {
+          showSlides(slideIndex1 = n);
+        }
+
+        function showSlides(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides");
+          if (n > slides.length) {slideIndex1 = 1}
+          if (n < 1) {slideIndex1 = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          slides[slideIndex1 -1].style.display = "block";
+        }
+
+
+        var slideIndex2 = 0;
+        carousel1();
+
+        function carousel1() {
+          var i;
+          var x = document.getElementsByClassName("mySlides2");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+          }
+          slideIndex2++;
+          if (slideIndex2 > x.length) {slideIndex2 = 1}
+          x[slideIndex2-1].style.display = "block";
+          setTimeout(carousel1, 7000);
+        }
+        var slideIndex3 = 1;
+        showSlides1(slideIndex3);
+
+        function plusSlides1(n) {
+          showSlides1(slideIndex3 += n);
+        }
+
+        function currentSlide1(n) {
+          showSlides1(slideIndex3 = n);
+        }
+
+        function showSlides1(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides2");
+          if (n > slides.length) {slideIndex3 = 1}
+          if (n < 1) {slideIndex3 = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          slides[slideIndex3 -1].style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
