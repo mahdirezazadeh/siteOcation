@@ -1,5 +1,8 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User as User_in_built
+from django.utils import timezone
+
 
 # Create your models here.
 
@@ -25,54 +28,29 @@ class AreaServed(models.Model):
         return self.name
 
 
-class User(models.Model):
+class Profile(models.Model):
     """Model representing a users."""
-    id = models.CharField(max_length=30, primary_key=True)
-    password = models.CharField(max_length=100, blank=False, null=False)
 
-    # Whether this user can access the admin site.
-    is_staff = models.BooleanField(default=False)
+    user = models.OneToOneField(User_in_built, on_delete=models.CASCADE, primary_key=True)
 
-    # Whether this user account should be considered active. We set this flag to False instead of deleting accounts.
-    # That way, if your applications have any foreign keys to users, the foreign keys won’t break.
-    is_active = models.BooleanField(default=True)
-
-    # Is an admin؟
-    is_superuser = models.BooleanField(default=False)
-
-    # this user has all permissions without explicitly assigning them.
-    is_authenticated = models.BooleanField(default=True)
-
-    # A datetime of the user’s last login
-    last_login = models.DateTimeField(auto_now_add=True)
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100, blank=True, null=True, )
-    email = models.EmailField(unique=True, )
     user_picture = models.ImageField(help_text="Upload the picture of user.", blank=True, null=True, )
     bio = models.CharField(max_length=50, blank=True, null=True, )
-    date_of_birth = models.DateField(auto_now_add=True)
-
-    # when the account was created. Is set to the current date/time by default when the account is created.
-    date_joined = models.DateTimeField(auto_now_add=True, )
+    date_of_birth = models.DateField(default=timezone.now)
 
     # language = models
 
     class Meta:
-        ordering = ['id', 'email']
-
-    def __str__(self):
-        """String for representing the Model object."""
-        return f'{self.id}; {self.last_name} {self.first_name}'
+        ordering = ['user__username']
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this User."""
-        return reverse('user-detail', args=[str(self.id)])
+        return reverse('user-detail', args=[str(self.user.id)])
 
 
 class Founder(models.Model):
     """Model representing a founders."""
     name = models.CharField(max_length=100, primary_key=True)
-    user_id = models.ForeignKey(User,
+    user_id = models.ForeignKey(Profile,
                                 on_delete=models.SET_NULL,
                                 blank=True,
                                 null=True, )
@@ -93,7 +71,7 @@ class Website(models.Model):
     founded = models.DateField(help_text='When was this website created?', blank=True, null=True, )
     modified = models.DateTimeField(auto_now_add=True, help_text='When was this page created?')
 
-    writen_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    writen_by = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True)
 
     # Null has no effect on Many To Many Field.
     founders = models.ManyToManyField(Founder, help_text='Who made this website?', blank=True)
@@ -141,7 +119,7 @@ class Comment(models.Model):
     website_id = models.ForeignKey(Website, on_delete=models.CASCADE)
 
     # Foreign Key used because comments can only have one user, but users can have multiple comments
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(Profile, on_delete=models.CASCADE)
     modified = models.DateTimeField(auto_now_add=True, help_text='When was this page created?')
     comment = models.CharField(max_length=600)
     likes = models.PositiveIntegerField(default=0)
