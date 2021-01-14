@@ -28,7 +28,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('homepage/', include('website.urls')),
+    path('home/', include('website.urls')),
 ]
 
 urlpatterns += [
