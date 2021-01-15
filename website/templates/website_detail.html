@@ -9,7 +9,7 @@
     <p>_____________________________________________________________________________</p>
     {% for comment in comments %}
         <a href="{{ comment.user_id.get_absolute_url }}">
-                @{{ comment.user_id.id }}
+                @{{ comment.user_id.user.username }}
             </a>
         <br>
           <p>{{ comment.comment }}</p>

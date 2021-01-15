@@ -3,8 +3,9 @@ from django.shortcuts import render
 # from django.shortcuts import get_object_or_404
 from django.views import generic
 from website.models import Website
-from website.models import User
+from website.models import Profile
 from website.models import Comment
+from django.contrib.auth.models import User as User_in_built
 # from website.models import Industry
 # from website.models import AreaServed
 # from website.models import Founder
@@ -24,7 +25,7 @@ def home(request):
     num_worldwide_websites = Website.objects.filter(areaServed__exact='World wide').count()
 
     # The 'all()' is implied by default.
-    num_users = User.objects.count()
+    num_users = Profile.objects.count()
 
     # websites = Website.objects.all()
 
@@ -64,12 +65,15 @@ def user_detail(request, pk):
     """View function for home page of site."""
 
     # Available books (status = 'a')
-    user = User.objects.get(id=pk)
+    user = User_in_built.objects.get(id=pk)
 
-    comments = reversed(Comment.objects.filter(user_id=pk, reply=None))
+    user_details = Profile.objects.get(user_id=user.id)
+
+    comments = reversed(Comment.objects.filter(user_id=user.id, reply=None))
 
     context = {
         'user': user,
+        'detail': user_details,
         'comments': comments,
     }
 

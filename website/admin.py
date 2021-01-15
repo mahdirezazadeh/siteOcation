@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import Profile
 from .models import Website
 from .models import Comment
 from .models import Founder
@@ -17,16 +17,16 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('user_id', 'website_id', 'comment_id', 'reply')
 
 
-class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'last_name', 'first_name', 'email')
+# class ProfileAdmin(admin.ModelAdmin):
+#     list_display = ('user__username', 'user__last_name', 'user__first_name', 'user__email')
 
 
-# admin.site.register(User)
+admin.site.register(Profile)
 # admin.site.register(Website)
 # admin.site.register(Comment)
 admin.site.register(Industry)
 admin.site.register(AreaServed)
 admin.site.register(Founder)
-admin.site.register(User, UserAdmin)
+# admin.site.register(Profile, ProfileAdmin)
 admin.site.register(Website, WebsiteAdmin)
 admin.site.register(Comment, CommentAdmin)
