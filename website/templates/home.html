@@ -24,7 +24,7 @@
         </h2>
         <h1>
             <a href="{{ comment.user_id.get_absolute_url }}">
-                @{{ comment.user_id.id }}
+                @{{ comment.user_id.user.username }}
             </a>
         </h1>
         <p dir="ltr">
