@@ -1,38 +1,157 @@
-{% extends "main_base.html" %}
+{% extends "main-a.html" %}
 
 {% block content %}
-<h1>siteocation Home</h1>
-  <p>Welcome to siteocation, a website developed by <em>Parsa, Ardavan, Mahdi</em>!</p>
-  <h2>Dynamic content</h2>
-  <p>The siteocation has the following record counts:</p>
-  <ul>
-    <li><strong>Websites:</strong> {{ num_websites }}</li>
-    <li><strong>Worldwide websites:</strong> {{ num_worldwide_websites }}</li>
-    <li><strong>Users:</strong> {{ num_users }}</li>
-    <li><strong>user is logged:</strong> {{ is_logged }}</li>
-  </ul>
-{% for comment in comments %}
-    <div>
-        <p>
-            ______________________________________________________________________________________________________________
-        </p>
-        <h2>
-            <a href="{{ comment.website_id.get_absolute_url }}">
-                <img src="{{comment.website_id.brand_picture}}">
-                {{ comment.website_id }}
-            </a>
-        </h2>
-        <h1>
-            <a href="{{ comment.user_id.get_absolute_url }}">
-                @{{ comment.user_id.user.username }}
-            </a>
-        </h1>
-        <p dir="ltr">
-            {{ comment.comment }}
-            <br>
-            <br>
-            ______________________________________________________________________________________________________________
-        </p>
+    <ul class="sidebar-nav">
+        <br>
+
+        ...
+
+       {% if user.is_authenticated %}
+         <li>User: {{ user.get_username }}</li>
+         <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
+       {% else %}
+         <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
+       {% endif %}
+    </ul>
+
+    <div class="Body">
+        <div style="width: 50%; margin-left: 25%;" class="w3-content">
+
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            {% for comment in recent_comments %}
+                <div class="mySlides">
+                    <p class="most">Most Recent Comments</p>
+                    <a class="website-tag-comment" href="{{ comment.website_id.get_absolute_url }}">
+                        {{ comment.website_id }}
+                    </a>
+                    <br>
+                    <h2 class="Comment" href="{{ comment.user_id.get_absolute_url }}">
+                        @{{ comment.user_id.user.username }}
+                    </h2>
+                    <p class="p-comment">{{ comment.comment }}</p>
+                    <div>
+                        <p class="like-count">{{ comment.likes }}</p>
+                        <p class="dislike-count">{{ comment.dislikes }}</p>
+                        {% if user.is_authenticated %}
+                            <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                            <button class="like"><span class="fa fa-thumbs-down"></span></button>
+                        {% else %}
+                            <span class="fa fa-thumbs-up like2" ></span>
+                            <span class="fa fa-thumbs-down like2"></span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div style="width: 50%; margin-left: 25%;" class="w3-content">
+            <a class="prev" onclick="plusSlides1(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides1(1)">&#10095;</a>
+            {% for comment in liked_comments %}
+                <div class="mySlides2">
+                    <p class="most">Most Liked Comments</p>
+                    <a class="website-tag-comment" href="{{ comment.website_id.get_absolute_url }}">
+                        {{ comment.website_id }}
+                    </a>
+                    <br>
+                    <h2 class="Comment" href="{{ comment.user_id.get_absolute_url }}">
+                        @{{ comment.user_id.user.username }}
+                    </h2>
+                    <p class="p-comment">{{ comment.comment }}</p>
+                    <div>
+                        <p class="like-count">{{ comment.likes }}</p>
+                        <p class="dislike-count">{{ comment.dislikes }}</p>
+                        {% if user.is_authenticated %}
+                            <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                            <button class="like"><span class="fa fa-thumbs-down"></span></button>
+                        {% else %}
+                            <span class="fa fa-thumbs-up like2" ></span>
+                            <span class="fa fa-thumbs-down like2"></span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
-{% endfor %}
+
+{% endblock %}
+
+
+{% block script %}
+    <script>
+        var slideIndex = 0;
+        carousel();
+
+        function carousel() {
+          var i;
+          var x = document.getElementsByClassName("mySlides");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+          }
+          slideIndex++;
+          if (slideIndex > x.length) {slideIndex = 1}
+          x[slideIndex-1].style.display = "block";
+          setTimeout(carousel, 7000);
+        }
+        var slideIndex1 = 1;
+        showSlides(slideIndex1);
+
+        function plusSlides(n) {
+          showSlides(slideIndex1 += n);
+        }
+
+        function currentSlide(n) {
+          showSlides(slideIndex1 = n);
+        }
+
+        function showSlides(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides");
+          if (n > slides.length) {slideIndex1 = 1}
+          if (n < 1) {slideIndex1 = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          slides[slideIndex1 -1].style.display = "block";
+        }
+
+
+        var slideIndex2 = 0;
+        carousel1();
+
+        function carousel1() {
+          var i;
+          var x = document.getElementsByClassName("mySlides2");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+          }
+          slideIndex2++;
+          if (slideIndex2 > x.length) {slideIndex2 = 1}
+          x[slideIndex2-1].style.display = "block";
+          setTimeout(carousel1, 7000);
+        }
+        var slideIndex3 = 1;
+        showSlides1(slideIndex3);
+
+        function plusSlides1(n) {
+          showSlides1(slideIndex3 += n);
+        }
+
+        function currentSlide1(n) {
+          showSlides1(slideIndex3 = n);
+        }
+
+        function showSlides1(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides2");
+          if (n > slides.length) {slideIndex3 = 1}
+          if (n < 1) {slideIndex3 = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          slides[slideIndex3 -1].style.display = "block";
+        }
+    </script>
 {% endblock %}
