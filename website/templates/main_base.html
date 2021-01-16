@@ -244,19 +244,20 @@ input[type=password] {
       </form>
     </div>
     <div id="login" class="modal">
-      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/login.py" method="post">
-        <div style="border-radius: 20px 20px 0px 0px;" class="container">
-          <label for="uname"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="uname" required>
+    <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/accounts/login/" method="post">
+            {% csrf_token %}
+            <div style="border-radius: 20px 20px 0px 0px;" class="container">
+                  <label for="id_username"><b>Username</b></label>
+                  <input type="text" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username">
 
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
+                  <label for="id_password"><b>Password</b></label>
+                  <input type="password" name="password" placeholder="Enter Password" autocomplete="current-password" required id="id_password">
 
-          <button type="submit">Login</button>
-          <label>
-            <input style="color: #f1f1f1;" type="checkbox" checked="checked" name="remember"> Remember me
-          </label>
-        </div>
+                  <button type="submit" value="login">Login</button>
+                  <label>
+                        <input style="color: #f1f1f1;" type="checkbox" checked="checked" name="remember"> Remember me
+                  </label>
+            </div>
 
         <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc">
             <button type="button" onclick="document.getElementById('login').style.display='none'" class="cancelbtn">

@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>SiteOcation</title>
+    <title>{% block title %}SiteOcation{% endblock %}</title>
     <style>
 body {
     background: url(../../media/image/BackGround/BG.png) repeat fixed center;
@@ -24,7 +24,7 @@ body {
   color: #888888;
 }
 
-.like1{
+.like2{
   font-size: 25px;
   background-color: #333333;
   border: none;
@@ -328,14 +328,21 @@ input[type=password] {
 <div class="Header">
     <div style="width: 100%;">
         <div style="float: left; width: 40%">
-        <button class="button" onclick="document.getElementById('login').style.display='block'"
-                style="margin: 40px 5px 40px 30px; width: auto;">
-            Login
-        </button>
-        <button class="button" onclick="document.getElementById('createAccount').style.display='block'"
-                style="margin: 15px 5px 15px 15px; width: auto; ">
-            Create Account
-        </button>
+            {% if user.is_authenticated %}
+                 <a class="kharab" href="{% url 'logout'%}?next={{request.path}}">
+                    <button class="button" style="margin: 40px 5px 40px 30px; width: auto; float: left;">
+                        Logout
+                    </button>
+                 </a>
+            {% else %}
+                <button class="button" onclick="document.getElementById('login').style.display='block'" style="margin: 40px 5px 40px 30px; width: auto;">
+                    Login
+                </button>
+                <button class="button" onclick="document.getElementById('createAccount').style.display='block'" style="margin: 15px 5px 15px 15px; width: auto; ">
+                    Create Account
+                </button>
+            {% endif %}
+
         </div>
         <div style="float: right; width: 35%">
         <a class="kharab" href="/contact/">
@@ -394,17 +401,19 @@ input[type=password] {
       </form>
     </div>
     <div id="login" class="modal">
-      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/login.py" method="post">
+      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="{% url 'login' %}" method="post">
+          {% csrf_token %}
         <div style="border-radius: 20px 20px 0px 0px;" class="container">
-          <label for="uname"><b>Username</b></label>
-          <input type="text" placeholder="Enter Username" name="uname" required>
+          <label for="id_username"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" required="" id="id_username">
 
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
-
-          <button class="button" type="submit">Login</button>
+          <label for="id_password"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="password" autocomplete="current-password" required="" id="id_password">
+          <a class="kharab" href="{% url 'login'%}?next={{request.path}}">
+            <button class="button" type="submit" value="login" >Login</button>
+          </a>
           <label>
-            <input style="color: #f1f1f1;" type="checkbox" checked="checked" name="remember"> Remember me
+          <input style="color: #f1f1f1;" type="checkbox" checked="checked" name="remember"> Remember me
           </label>
         </div>
 
@@ -422,109 +431,8 @@ input[type=password] {
       </form>
     </div>
 </div>
-<div class="Body">
-    <div style="width: 50%; margin-left: 25%;" class="w3-content">
-
-        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-        <div class="mySlides">
-            <p class="most">Most Recent Comments</p>
-            <a class="website-tag-comment" href="apple">@Amazon</a>
-            <H2 class="Comment">User Name</H2>
-            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment ha</p>
-            <div>
-                <p class="like-count">3265</p>
-                <p class="dislike-count">3265</p>
-                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
-                <button class="like"><span class="fa fa-thumbs-down"></span></button>
-            </div>
-        </div>
-
-        <div class="mySlides">
-            <p class="most">Most Recent Comments</p>
-            <a class="website-tag-comment" href="apple">@Google</a>
-            <H2 class="Comment">User Name2</H2>
-            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment ha harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment ha</p>
-            <div>
-                <p class="like-count">3265</p>
-                <p class="dislike-count">3265</p>
-                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
-                <button class="like"><span class="fa fa-thumbs-down"></span></button>
-            </div>
-        </div>
-
-        <div class="mySlides">
-            <p class="most">Most Recent Comments</p>
-            <a class="website-tag-comment" href="apple">@Apple</a>
-            <H2 class="Comment">User Name3</H2>
-            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid tarin comment ha</p>
-            <div>
-                <p class="like-count">3265</p>
-                <p class="dislike-count">3265</p>
-                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
-                <button class="like"><span class="fa fa-thumbs-down"></span></button>
-            </div>
-        </div>
-    </div>
-
-    <div style="width: 50%; margin-left: 25%;" class="w3-content">
-        <a class="prev" onclick="plusSlides1(-1)">&#10094;</a>
-        <a class="next" onclick="plusSlides1(1)">&#10095;</a>
-
-        <div class="mySlides2">
-            <p class="most">Most Liked Comments</p>
-            <a class="website-tag-comment" href="apple">@Google</a>
-            <H2 class="Comment">User Name2</H2>
-            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment ha harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment ha</p>
-            <div>
-                <p class="like-count">3265</p>
-                <p class="dislike-count">3265</p>
-                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
-                <button class="like"><span class="fa fa-thumbs-down"></span></button>
-            </div>
-        </div>
-
-        <div class="mySlides2">
-            <p class="most">Most Liked Comments</p>
-            <a class="website-tag-comment" href="apple">@Apple</a>
-            <H2 class="Comment">User Name3</H2>
-            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid tarin comment ha</p>
-            <div>
-                <p class="like-count">3265</p>
-                <p class="dislike-count">3265</p>
-                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
-                <button class="like"><span class="fa fa-thumbs-down"></span></button>
-            </div>
-        </div>
-
-        <div class="mySlides2">
-            <p class="most">Most Liked Comments</p>
-            <a class="website-tag-comment" href="apple">@Amazon</a>
-            <H2 class="Comment">User Name</H2>
-            <p class="p-comment">harf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment haharf va nazaraty dar mored site ke in bakhsh baraye bishtarin like va paini baraye jadid
-                tarin comment ha</p>
-            <div>
-                <p class="like-count">3265</p>
-                <p class="dislike-count">3265</p>
-                <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
-                <button class="like"><span class="fa fa-thumbs-down"></span></button>
-            </div>
-        </div>
-
-    </div>
-</div>
+{% block content %}
+{% endblock %}
 <div class="Footer row">
     <div class="align-self-center developers">
         2020 Created By SiteOcation Group
@@ -535,80 +443,8 @@ input[type=password] {
     </div>
 </div>
 
-<script>
-        var slideIndex = 0;
-        carousel();
-
-        function carousel() {
-          var i;
-          var x = document.getElementsByClassName("mySlides");
-          for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-          }
-          slideIndex++;
-          if (slideIndex > x.length) {slideIndex = 1}
-          x[slideIndex-1].style.display = "block";
-          setTimeout(carousel, 7000);
-        }
-        var slideIndex1 = 1;
-        showSlides(slideIndex1);
-
-        function plusSlides(n) {
-          showSlides(slideIndex1 += n);
-        }
-
-        function currentSlide(n) {
-          showSlides(slideIndex1 = n);
-        }
-
-        function showSlides(n) {
-          var i;
-          var slides = document.getElementsByClassName("mySlides");
-          if (n > slides.length) {slideIndex1 = 1}
-          if (n < 1) {slideIndex1 = slides.length}
-          for (i = 0; i < slides.length; i++) {
-              slides[i].style.display = "none";
-          }
-          slides[slideIndex1 -1].style.display = "block";
-        }
-
-
-        var slideIndex2 = 0;
-        carousel1();
-
-        function carousel1() {
-          var i;
-          var x = document.getElementsByClassName("mySlides2");
-          for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-          }
-          slideIndex2++;
-          if (slideIndex2 > x.length) {slideIndex2 = 1}
-          x[slideIndex2-1].style.display = "block";
-          setTimeout(carousel1, 7000);
-        }
-        var slideIndex3 = 1;
-        showSlides1(slideIndex3);
-
-        function plusSlides1(n) {
-          showSlides1(slideIndex3 += n);
-        }
-
-        function currentSlide1(n) {
-          showSlides1(slideIndex3 = n);
-        }
-
-        function showSlides1(n) {
-          var i;
-          var slides = document.getElementsByClassName("mySlides2");
-          if (n > slides.length) {slideIndex3 = 1}
-          if (n < 1) {slideIndex3 = slides.length}
-          for (i = 0; i < slides.length; i++) {
-              slides[i].style.display = "none";
-          }
-          slides[slideIndex3 -1].style.display = "block";
-        }
-    </script>
+{% block script %}
+{% endblock %}
 
 </body>
 </html>
