@@ -29,15 +29,18 @@ def home(request):
 
     # websites = Website.objects.all()
 
-    comments = reversed(Comment.objects.all())
+    recent_comments = Comment.objects.order_by('-modified')[:10]
+
+    liked_comments = Comment.objects.order_by('-likes')[:10]
 
     context = {
         'num_websites': num_websites,
         'num_worldwide_websites': num_worldwide_websites,
         'num_users': num_users,
         # 'websites': websites,
-        'comments': comments,
+        'recent_comments': recent_comments,
         'is_logged': is_logged,
+        'liked_comments': liked_comments,
     }
 
     # Render the HTML template index.html with the data in the context variable
@@ -72,7 +75,7 @@ def user_detail(request, pk):
     comments = reversed(Comment.objects.filter(user_id=user.id, reply=None))
 
     context = {
-        'user': user,
+        'userview': user,
         'detail': user_details,
         'comments': comments,
     }
@@ -82,7 +85,7 @@ def user_detail(request, pk):
 
 
 def about(request):
-    return render(request, 'about.html')
+    return render(request, 'about-a.html')
 
 
 def contact(request):
