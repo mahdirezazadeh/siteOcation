@@ -98,6 +98,12 @@ class Website(models.Model):
     likes = models.PositiveIntegerField(default=0)
     dislikes = models.PositiveIntegerField(default=0)
 
+    def get_likes_count(self):
+        return WebsiteLikes.objects.filter(website=self.website_domain_name).count()
+
+    def get_dislikes_count(self):
+        return WebsiteDislikes.objects.filter(website=self.website_domain_name).count()
+
     class Meta:
         ordering = ['-likes', 'dislikes', 'name']
 
@@ -108,6 +114,22 @@ class Website(models.Model):
     def get_absolute_url(self):
         """Returns the url to access a detail record for this Website."""
         return reverse('website-detail', args=[str(self.website_domain_name)])
+
+
+class WebsiteLikes(models.Model):
+    website = models.ForeignKey(Website, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("website", "user"),)
+
+
+class WebsiteDislikes(models.Model):
+    website = models.ForeignKey(Website, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("website", "user"),)
 
 
 class Comment(models.Model):
@@ -134,6 +156,28 @@ class Comment(models.Model):
         comment_details += f'Comment to: {self.website_id}, Reply to: {self.reply})'
         return comment_details
 
+    def get_likes_count(self):
+        return CommentLikes.objects.filter(comment=self.comment_id).count()
+
+    def get_dislikes_count(self):
+        return CommentDislike.objects.filter(comment=self.comment_id).count()
+
     def get_absolute_url(self):
         """Returns the url to access a detail record for this User."""
         return reverse('comment-detail', args=[str(self.comment_id)])
+
+
+class CommentLikes(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("comment", "user"),)
+
+
+class CommentDislike(models.Model):
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = (("comment", "user"),)

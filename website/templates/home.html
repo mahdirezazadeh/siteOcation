@@ -32,8 +32,8 @@
                     </h2>
                     <p class="p-comment">{{ comment.comment }}</p>
                     <div>
-                        <p class="like-count">{{ comment.likes }}</p>
-                        <p class="dislike-count">{{ comment.dislikes }}</p>
+                        <p class="like-count">{{ comment.get_likes_count }}</p>
+                        <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
                         {% if user.is_authenticated %}
                             <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
                             <button class="like"><span class="fa fa-thumbs-down"></span></button>
@@ -61,8 +61,8 @@
                     </h2>
                     <p class="p-comment">{{ comment.comment }}</p>
                     <div>
-                        <p class="like-count">{{ comment.likes }}</p>
-                        <p class="dislike-count">{{ comment.dislikes }}</p>
+                        <p class="like-count">{{ comment.get_likes_count }}</p>
+                        <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
                         {% if user.is_authenticated %}
                             <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
                             <button class="like"><span class="fa fa-thumbs-down"></span></button>
