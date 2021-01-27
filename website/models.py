@@ -152,7 +152,7 @@ class Comment(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        comment_details = f'(User: {self.user_id}, ID: {self.comment_id}, '
+        comment_details = f'(User: {self.user_id.user.username}, ID: {self.comment_id}, '
         comment_details += f'Comment to: {self.website_id}, Reply to: {self.reply})'
         return comment_details
 
