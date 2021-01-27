@@ -49,3 +49,7 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
 ]
+
+urlpatterns += [
+    path('user/<pk>/renew/', website_veiws.renew_user_login_date, name='renew-user-login-date'),
+]

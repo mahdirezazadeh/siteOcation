@@ -1,0 +1,15 @@
+{% extends "main-a.html" %}
+
+{% block content %}
+  <h1>Renew: {{ user_a.user.username }}</h1>
+  <p>Current date of birth: {{ user_a.date_of_birth }}</p>
+  <p class="text-danger">Due date: {{ user_a.user.date_joined }}</p>
+
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
+{% endblock %}

@@ -1,11 +1,19 @@
 # from django.http import Http404
 from django.shortcuts import render
-# from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404
+import datetime
+
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required, permission_required
+
+from django.contrib.auth.models import User as User_in_built
 from django.views import generic
 from website.models import Website
 from website.models import Profile
 from website.models import Comment
-from django.contrib.auth.models import User as User_in_built
+
+from website.forms import RenewLogin
 # from website.models import Industry
 # from website.models import AreaServed
 # from website.models import Founder
@@ -135,3 +143,34 @@ class WebsiteListView(generic.ListView):
     #         raise Http404('website does not exist')
     #
     #     return render(self, "website/website_detail.html", context={'website': website})
+
+
+@login_required
+def renew_user_login_date(request, pk):
+    user = get_object_or_404(Profile, pk=pk)
+    # If this is a POST request then process the Form data
+    if request.method == 'POST':
+
+        # Create a form instance and populate it with data from the request (binding):
+        form = RenewLogin(request.POST)
+
+        # Check if the form is valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+            user.date_of_birth = form.cleaned_data['renew_date']
+            user.save()
+
+            # redirect to a new URL:
+            return HttpResponseRedirect(reverse('user-detail', args=[str(user.user.id)]))
+
+    # If this is a GET (or any other method) create the default form.
+    else:
+        proposed_renewal_date = datetime.date.today() - datetime.timedelta(weeks=52)
+        form = RenewLogin(initial={'renew_date': proposed_renewal_date})
+
+    context = {
+        'form': form,
+        'user_a': user,
+    }
+
+    return render(request, 'login_edit_time.html', context)
