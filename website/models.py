@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User as User_in_built
 from django.utils import timezone
@@ -32,7 +34,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User_in_built, on_delete=models.CASCADE, primary_key=True)
 
-    user_picture = models.ImageField(help_text="Upload the picture of user.", blank=True, null=True, )
+    user_picture = models.ImageField(upload_to='img', help_text="Upload the picture of user.", blank=True, null=True, )
     bio = models.CharField(max_length=50, blank=True, null=True, )
     date_of_birth = models.DateField(default=timezone.now)
 
@@ -46,15 +48,11 @@ class Profile(models.Model):
         return reverse('user-detail', args=[str(self.user.id)])
 
 
-
-
-
-
-
-
-
-
-
+@receiver(post_save, sender=User_in_built)
+def update_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    instance.profile.save()
 
 class Founder(models.Model):
     """Model representing a founders."""
@@ -94,7 +92,8 @@ class Website(models.Model):
     subsidiaries = models.ManyToManyField("self", max_length=200, blank=True,
                                           help_text='the companies that is owned or controlled by this company')
 
-    brand_picture = models.ImageField(null=True, blank=True, help_text="Upload the picture of website's brand.")
+    brand_picture = models.ImageField(upload_to='img', null=True, blank=True,
+                                      help_text="Upload the picture of website's brand.")
 
     headquarters = models.CharField(max_length=200,
                                     help_text='The location where most of the important'

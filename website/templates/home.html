@@ -1,86 +1,115 @@
-{% extends "main-a.html" %}
+{% extends "Main-a.html" %}
 
 {% block content %}
-    <ul class="sidebar-nav">
-        <br>
+<div class="Body">
+    <input class="input" style="width: 50%; margin-left: 25%;" type="text" placeholder="Search For Website">
+    <button class="searchBtn"><img class="searchPic" src="../../media/image/Search/—Pngtree—search%20icon_4699282.png"></button>
 
-        ...
-
-       {% if user.is_authenticated %}
-         <li>User: {{ user.get_username }}</li>
-         <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
-       {% else %}
-         <li><a href="{% url 'login'%}?next={{request.path}}">Login</a></li>
-       {% endif %}
-    </ul>
-
-    <div class="Body">
-        <div style="width: 50%; margin-left: 25%;" class="w3-content">
-
-            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
+    <div class="commentPlace">
+        <div style="width: 95%; margin-left: 2.5%;" class="w3-content">
             {% for comment in recent_comments %}
-                <div class="mySlides">
-                    <p class="most">Most Recent Comments</p>
-                    <a class="website-tag-comment" href="{{ comment.website_id.get_absolute_url }}">
-                        {{ comment.website_id }}
-                    </a>
-                    <br>
-                    <h2 class="Comment" href="{{ comment.user_id.get_absolute_url }}">
-                        @{{ comment.user_id.user.username }}
-                    </h2>
-                    <p class="p-comment">{{ comment.comment }}</p>
-                    <div>
-                        <p class="like-count">{{ comment.get_likes_count }}</p>
-                        <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
-                        {% if user.is_authenticated %}
-                            <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
-                            <button class="like"><span class="fa fa-thumbs-down"></span></button>
-                        {% else %}
-                            <span class="fa fa-thumbs-up like2" ></span>
-                            <span class="fa fa-thumbs-down like2"></span>
-                        {% endif %}
-                    </div>
+            <div class="mySlides">
+                <div>
+                    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                    <a class="next" onclick="plusSlides(1)">&#10095;</a>
                 </div>
+                <p class="most">Most Recent Comments</p>
+                <a class="website-tag-comment" href="{{ comment.website_id.get_absolute_url }}">
+                    {{ comment.website_id }}
+                </a><br>
+                <a class="Comment" href="{{ comment.user_id.get_absolute_url }}">
+                    @{{ comment.user_id.user.username }}
+                </a>
+                <p class="p-comment">
+                    {{ comment.comment }}
+                </p>
+                <div class="likey">
+                    <p class="like-count">{{ comment.get_likes_count }}</p>
+                    <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
+                    {% if user.is_authenticated %}
+                        <button class="like"><span class="fa fa-thumbs-up"></span></button>
+                        <button class="like"><span class="fa fa-thumbs-down"></span></button>
+                    {% else %}
+                        <span class="fa fa-thumbs-up like2"></span>
+                        <span class="fa fa-thumbs-down like2"></span>
+                    {% endif %}
+                </div>
+            </div>
             {% endfor %}
+
         </div>
 
-        <div style="width: 50%; margin-left: 25%;" class="w3-content">
-            <a class="prev" onclick="plusSlides1(-1)">&#10094;</a>
-            <a class="next" onclick="plusSlides1(1)">&#10095;</a>
+        <div style="width: 95%; margin-left: 2.5%; margin-top: -2%;" class="w3-content">
+
             {% for comment in liked_comments %}
                 <div class="mySlides2">
+                    <div>
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    </div>
                     <p class="most">Most Liked Comments</p>
                     <a class="website-tag-comment" href="{{ comment.website_id.get_absolute_url }}">
                         {{ comment.website_id }}
-                    </a>
-                    <br>
-                    <h2 class="Comment" href="{{ comment.user_id.get_absolute_url }}">
+                    </a><br>
+                    <a class="Comment" href="{{ comment.user_id.get_absolute_url }}">
                         @{{ comment.user_id.user.username }}
-                    </h2>
-                    <p class="p-comment">{{ comment.comment }}</p>
-                    <div>
+                    </a>
+                    <p class="p-comment">
+                        {{ comment.comment }}
+                    </p>
+                    <div class="likey">
                         <p class="like-count">{{ comment.get_likes_count }}</p>
                         <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
                         {% if user.is_authenticated %}
-                            <button class="like like2"><span class="fa fa-thumbs-up"></span></button>
+                            <button class="like"><span class="fa fa-thumbs-up"></span></button>
                             <button class="like"><span class="fa fa-thumbs-down"></span></button>
                         {% else %}
-                            <span class="fa fa-thumbs-up like2" ></span>
+                            <span class="fa fa-thumbs-up like2"></span>
                             <span class="fa fa-thumbs-down like2"></span>
                         {% endif %}
                     </div>
                 </div>
             {% endfor %}
-        </div>
-    </div>
 
+        </div>
+        </div>
+
+        <button class="addWebsite" onclick="document.getElementById('websiteCreat').style.display='block'">Add New Website</button>
+        <div id="websiteCreat" class="modal">
+          <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/websiteCreat.py" method="post">
+            <div style="border-radius: 20px 20px 0px 0px;" class="container">
+
+              <label for="SiteName" style="float: left; width: 47%;"><b>Site Name</b></label>
+              <label for="SiteLink" style="float: right; width: 47%;"><b>Site Link</b></label>
+              <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter SiteName" name="SiteName" required>
+              <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter SiteLink with out www. and .com" name="SiteLink" required>
+
+              <label for="DateOfEstablishment" style="float: left; width: 47%;"><b>Date of Establishment</b></label>
+              <label for="EmploeeyCount" style="float: right; width: 47%;"><b>Emploeey Count</b></label><br>
+              <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Date of Establishment" name="DateOfEstablishment">
+              <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Count of Emploeey" name="EmploeeyCount" required>
+
+              <label for="psw"><b>Description</b></label>
+              <textarea class="input" name="Description" rows="auto" cols="100"></textarea>
+
+            </div>
+
+            <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
+              <button type="button" onclick="document.getElementById('websiteCreat').style.display='none'" class="cancelbtn">
+                  Cancel
+              </button>
+              <button class="button" type="button" onclick="document.getElementById('websiteCreat').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
+                  Creat
+              </button>
+            </div>
+          </form>
+    </div>
+</div>
 {% endblock %}
 
 
 {% block script %}
-    <script>
+<script>
         var slideIndex = 0;
         carousel();
 
