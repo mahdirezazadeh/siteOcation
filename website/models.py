@@ -30,7 +30,7 @@ class AreaServed(models.Model):
 
 
 class Profile(models.Model):
-    """Model representing a users."""
+    """Model representing a users profile."""
 
     user = models.OneToOneField(User_in_built, on_delete=models.CASCADE, primary_key=True)
 
@@ -53,7 +53,6 @@ def update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
     instance.profile.save()
-
 
 class Founder(models.Model):
     """Model representing a founders."""
@@ -109,9 +108,11 @@ class Website(models.Model):
     dislikes = models.PositiveIntegerField(default=0)
 
     def get_likes_count(self):
+        """Returns website like counts."""
         return WebsiteLikes.objects.filter(website=self.website_domain_name).count()
 
     def get_dislikes_count(self):
+        """Returns website Dislike counts."""
         return WebsiteDislikes.objects.filter(website=self.website_domain_name).count()
 
     class Meta:
@@ -127,6 +128,7 @@ class Website(models.Model):
 
 
 class WebsiteLikes(models.Model):
+    """ Model representing Website Likes."""
     website = models.ForeignKey(Website, on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
@@ -135,6 +137,7 @@ class WebsiteLikes(models.Model):
 
 
 class WebsiteDislikes(models.Model):
+    """ Model representing Website DisLikes."""
     website = models.ForeignKey(Website, on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
@@ -167,9 +170,11 @@ class Comment(models.Model):
         return comment_details
 
     def get_likes_count(self):
+        """Returns comments like counts."""
         return CommentLikes.objects.filter(comment=self.comment_id).count()
 
     def get_dislikes_count(self):
+        """Returns website Dislike counts."""
         return CommentDislike.objects.filter(comment=self.comment_id).count()
 
     def get_absolute_url(self):
@@ -178,6 +183,7 @@ class Comment(models.Model):
 
 
 class CommentLikes(models.Model):
+    """String for representing Comment Likes."""
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
@@ -186,6 +192,7 @@ class CommentLikes(models.Model):
 
 
 class CommentDislike(models.Model):
+    """String for representing Comment DisLikes."""
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
