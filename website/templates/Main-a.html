@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load widget_tweaks %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,10 +11,10 @@
     <title>{% block title %}SiteOcation{% endblock %}</title>
     <style>
 body {
-    background: url(../../media/image/BackGround/BG.png) repeat fixed center;
+    height: auto;
     font-family: 'Poppins', sans-serif; margin: 0;
     margin: 0px;
-    background-color: #f1f1f1;
+    background: #f1f1f1 url(../../media/image/BackGround/BG.png) repeat fixed center;
 }
 
 .like{
@@ -24,11 +25,37 @@ body {
   color: #888888;
 }
 
+.likey{
+    width: 50%;
+    margin-left: 25%;
+}
+
 .like2{
   font-size: 25px;
   background-color: #333333;
   border: none;
-    color: #888888;
+  color: #888888;
+}
+
+.user{
+    cursor: pointer;
+    float: left;
+    margin-left: 4%;
+    margin-top: 4%;
+}
+
+.userName{
+    cursor: default;
+    margin-left: 14%;
+    padding-top: 4%;
+    font-weight: bold;
+}
+
+.userEmail{
+    cursor: default;
+    margin-left: 14.5%;
+    padding-top: 1%;
+    font-weight: bold;
 }
 
 .like:hover {
@@ -37,23 +64,19 @@ body {
 }
 
 .like-count{
-    position: absolute;
-    margin-left: 18.5%;
+    float: left;
     margin-top: 10px;
     color: #888888;
 }
 
 .dislike-count{
-    position: absolute;
-    margin-left: 27%;
+    float: right;
     margin-top: 10px;
     color: #888888;
 }
 
 .prev, .next {
-  margin-top: 25px;
   cursor: pointer;
-  position: absolute;
   width: auto;
   color: white;
   font-weight: bold;
@@ -62,26 +85,51 @@ body {
   border-radius: 10px;
   user-select: none;
   text-decoration: none;
-  margin-left: 0.5%;
 }
 
-.next {
-  margin-left: 46.5%;
+.addWebsite{
+    color: #FCA311;
+    font-weight: bold;
+    border-radius: 25px;
+    background-color: #333333;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    margin-left: 30%;
+    margin-bottom: 3%;
+    padding: 10px 5px;
+}
+
+.addWebsite:hover{
+    font-weight: bold;
+    color: #333333;
+    background-color: #FCA311;
+}
+
+.prev{
+    float: left;
+}
+
+.next{
+    float: right;
 }
 
 .prev:hover, .next:hover {
   background-color: #FCA311;
-}
-
-a.prev:hover, a.next:hover{
     color: #333333;
 }
 
 .Comment{
+    text-decoration: none;
     font-size: large;
     font-weight: bold;
-    padding: 20px 0px;
-    color: #888888;
+    color: #FCA311;
+
+}
+
+.Comment:hover{
+    cursor: pointer;
+    color: #FCA311;
 }
 
 .most{
@@ -95,7 +143,6 @@ a.prev:hover, a.next:hover{
     border-radius: 25px;
     text-align: center;
     background-color: #333333;
-    margin: 20% 0px 0px 0px;
 }
 
 .mySlides2{
@@ -103,7 +150,7 @@ a.prev:hover, a.next:hover{
     border-radius: 25px;
     text-align: center;
     background-color: #333333;
-    margin: 20% 0px 0px 0px;
+    margin: 5% 0px 0px 0px;
 }
 
 .website-tag-comment{
@@ -123,14 +170,17 @@ a.prev:hover, a.next:hover{
     color: #888888;
 }
 
-input[type=text], input[type=password] {
-  width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-    font-family: 'Poppins';
+.commentPlace{
+    background-color: #6d6d6d;
+    border-radius: 20px;
+    margin: 5% 24%;
+    padding: 1% 0px;
+}
+
+.searchPic{
+    max-width: 50px;
+    max-height: 50px;
+    margin-right: 5%;
 }
 
 .button {
@@ -143,7 +193,6 @@ input[type=text], input[type=password] {
   border: none;
   cursor: pointer;
   width: 100%;
-  font-family: 'Poppins';
 }
 
 button:link, button:visited {
@@ -217,14 +266,14 @@ label{
     font-family: 'Poppins';
     padding: -10px 0px 10px 10px;
     background-color: #E5E5E5;
-    height: 120px;
+    height: 20%;
     width: 100%;
 }
 
 .Body{
     font-family: 'Poppins';
     padding: -10px 0px 10px 10px;
-    height: 1000px;
+    height: 60%;
     width: 100%;
 }
 
@@ -232,7 +281,7 @@ label{
     font-family: 'Poppins';
     padding: -10px 0px 10px 10px;
     background-color: #d6d6d6;
-    height: 120px;
+    height: 20%;
     width: 100%;
     margin: 0px;
 }
@@ -255,7 +304,7 @@ label{
     font-family: 'Poppins';
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -275,31 +324,43 @@ label{
   width: 40%;
 }
 
+.searchBtn{
+    border: 0px;
+    border-radius: 50px;
+}
+
+.searchBtn:hover{
+    background-color: #FCA311;
+}
+
 ::placeholder{
     font-family: 'Poppins';
   color: #010101;
 }
 
-input{
-    font-family: 'Poppins';
-    border: #010101;
+.input{
+    background-color: #f1f1f1;
+    color: #FCA311;
+    margin-bottom: 28px;
     border-radius: 25px;
 }
 
-input[type=text] {
-    font-family: 'Poppins';
+.input[type=text]::placeholder , .input[type=password]::placeholder, .input[type=email] {
   background-color: #f1f1f1;
-  color: #010101;
+  color: #FCA311;
   font-weight: bold;
-    opacity: 50%;
 }
 
-input[type=password] {
-    font-family: 'Poppins';
+input[type=text], input[type=password] ,input[type=email]{
+    background-color: #f1f1f1;
+  color: #FCA311;
   font-weight: bold;
-  background-color: #f1f1f1;
-  color: #010101;
-    opacity: 50%;
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 @-webkit-keyframes animatezoom {
@@ -328,21 +389,31 @@ input[type=password] {
 <div class="Header">
     <div style="width: 100%;">
         <div style="float: left; width: 40%">
-            {% if user.is_authenticated %}
-                 <a class="kharab" href="{% url 'logout'%}?next={{request.path}}">
-                    <button class="button" style="margin: 40px 5px 40px 30px; width: auto; float: left;">
-                        Logout
-                    </button>
-                 </a>
-            {% else %}
-                <button class="button" onclick="document.getElementById('login').style.display='block'" style="margin: 40px 5px 40px 30px; width: auto;">
-                    Login
-                </button>
-                <button class="button" onclick="document.getElementById('createAccount').style.display='block'" style="margin: 15px 5px 15px 15px; width: auto; ">
-                    Create Account
-                </button>
-            {% endif %}
+                {% if user.is_authenticated %}
+					<div>
+						<a style="cursor: default; text-decoration: none; padding: 0; color: #010101;" href="/user/">
+							<img class="user" src="../../media/image/User/Asset%201_1@1x.png">
+							<h4 class="userName">{{ user.username }}</h4>
+						</a>
+					</div>
+                    <div style="float: left;">
+                        <a class="kharab" href="{% url 'logout'%}?next={{request.path}}">
+                            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                                Logout
+                            </button>
+                        </a>
+                    </div>
 
+                {% else %}
+					<button class="button" onclick="document.getElementById('login').style.display='block'"
+							style="margin: 40px 5px 40px 30px; width: auto;">
+						Login
+					</button>
+					<button class="button" onclick="document.getElementById('createAccount').style.display='block'"
+							style="margin: 15px 5px 15px 15px; width: auto; ">
+						Create Account
+					</button>
+				{% endif %}
         </div>
         <div style="float: right; width: 35%">
         <a class="kharab" href="/contact/">
@@ -364,29 +435,39 @@ input[type=password] {
         <img class="logo" src="/media/image/logo/Asset%206@1x.png">
     </div>
     <div id="createAccount" class="modal">
-      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="/login.py" method="post">
+      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
+        {% csrf_token %}
         <div style="border-radius: 20px 20px 0px 0px;" class="container">
 
           <label for="uname" style="float: left; width: 47%;"><b>Username</b></label>
           <label for="email" style="float: right; width: 47%;"><b>Email</b></label>
-          <input style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Username" name="uname" required>
-          <input style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Email" name="email" required>
+          {% render_field sign_up_form.username class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter Username" %}
+<!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Username" name="uname" required>-->
+
+          {% render_field sign_up_form.email class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter Email" %}
+<!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Email" name="email" required>-->
 
           <label for="name" style="float: left; width: 47%;"><b>Name</b></label>
           <label for="LName" style="float: right; width: 47%;"><b>LastName</b></label><br>
-          <input style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Name" name="name" required>
-          <input style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter LastName" name="LName" required>
+
+          {% render_field sign_up_form.first_name class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter Name" %}
+<!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Name" name="name" required>-->
+          {% render_field sign_up_form.last_name class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter LastName" %}
+<!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter LastName" name="LName" required>-->
 
           <label for="psw"><b>Password</b></label>
-          <input style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>
+          {% render_field sign_up_form.password1 class="input" style="margin-bottom: 28px;" placeholder="Enter Password" %}
+<!--          <input class="input" style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>-->
 
           <label for="psw"><b>Confirm Password</b></label>
-          <input style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>
+          {% render_field sign_up_form.password2 class="input" style="margin-bottom: 28px;" placeholder="Enter Password Again" %}
+<!--          <input class="input" style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>-->
 
-          <button class="button" type="submit">Creat</button>
-          <label>
-              <input type="checkbox" checked="checked" name="remember"><b> Remember me</b>
-          </label>
+          <button class="button" type="submit" onclick="document.getElementById('createAccount').style.display='none'"
+                  style="width: 100%; padding: 10px 18px;">
+              Create
+          </button>
+
         </div>
 
         <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
@@ -422,28 +503,106 @@ input[type=password] {
               Cancel
           </button>
             <div style="float:right;">
-            <button class="button" type="button" onclick="document.getElementById('createAccount').style.display='block' ,
-          document.getElementById('login').style.display='none'" style="width: auto;">
-              Join SiteOcation
-          </button>
-                </div>
+                <button class="button" type="button" onclick="document.getElementById('createAccount').style.display='block' ,
+                    document.getElementById('login').style.display='none'" style="width: auto;">
+                  Join SiteOcation
+                </button>
+            </div>
         </div>
       </form>
     </div>
 </div>
-{% block content %}
-{% endblock %}
+
+
+
+    {% block content %}{% endblock %}
+
+</div>
 <div class="Footer row">
-    <div class="align-self-center developers">
-        2020 Created By SiteOcation Group
-    </div>
-    <div style="position: absolute; padding-top: 40px;" class="align-self-right developers">
+    <div style="z-index: 1; padding: 20px 0px;" class="align-self-right developers">
         <a class="a" style="float: right; margin-left: 10px;" href="contact.html">Contact Us</a>
         <a class="a" style="float: right;" href="about.html">About Us</a>
+    </div>
+    <div style="position: absolute" class="align-self-center developers">
+        2020 Created By SiteOcation Group
     </div>
 </div>
 
 {% block script %}
+<script>
+        var slideIndex = 0;
+        carousel();
+
+        function carousel() {
+          var i;
+          var x = document.getElementsByClassName("mySlides");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+          }
+          slideIndex++;
+          if (slideIndex > x.length) {slideIndex = 1}
+          x[slideIndex-1].style.display = "block";
+          setTimeout(carousel, 7000);
+        }
+        var slideIndex1 = 1;
+        showSlides(slideIndex1);
+
+        function plusSlides(n) {
+          showSlides(slideIndex1 += n);
+        }
+
+        function currentSlide(n) {
+          showSlides(slideIndex1 = n);
+        }
+
+        function showSlides(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides");
+          if (n > slides.length) {slideIndex1 = 1}
+          if (n < 1) {slideIndex1 = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          slides[slideIndex1 -1].style.display = "block";
+        }
+
+
+        var slideIndex2 = 0;
+        carousel1();
+
+        function carousel1() {
+          var i;
+          var x = document.getElementsByClassName("mySlides2");
+          for (i = 0; i < x.length; i++) {
+            x[i].style.display = "none";
+          }
+          slideIndex2++;
+          if (slideIndex2 > x.length) {slideIndex2 = 1}
+          x[slideIndex2-1].style.display = "block";
+          setTimeout(carousel1, 7000);
+        }
+        var slideIndex3 = 1;
+        showSlides1(slideIndex3);
+
+        function plusSlides1(n) {
+          showSlides1(slideIndex3 += n);
+        }
+
+        function currentSlide1(n) {
+          showSlides1(slideIndex3 = n);
+        }
+
+        function showSlides1(n) {
+          var i;
+          var slides = document.getElementsByClassName("mySlides2");
+          if (n > slides.length) {slideIndex3 = 1}
+          if (n < 1) {slideIndex3 = slides.length}
+          for (i = 0; i < slides.length; i++) {
+              slides[i].style.display = "none";
+          }
+          slides[slideIndex3 -1].style.display = "block";
+        }
+    </script>
 {% endblock %}
 
 </body>
