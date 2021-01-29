@@ -37,6 +37,7 @@ urlpatterns += [
     path('user/<pk>/', website_veiws.user_detail, name='user-detail'),
     path('about/', website_veiws.about),
     path('contact/', website_veiws.contact),
+    path('websites/', website_veiws.website_list_view, name='websites'),
 
     # pk (short for primary key) in our website model is website_domain_name
     # re_path(r'^website\/(?P<pk>[\w-]+)\/$', website_veiws.WebisteDetailView.as_view(website_domain_name='pk'),
