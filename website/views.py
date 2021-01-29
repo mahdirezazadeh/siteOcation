@@ -1,4 +1,5 @@
 # from django.http import Http404
+from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -153,6 +154,10 @@ def user_detail(request, pk):
 
     comments = reversed(Comment.objects.filter(user_id=user_view.id, reply=None))
 
+    paginator = Paginator(comments, 5)  # Show 25 contacts per page.
+    page_number = request.GET.get('page')
+    page_comments = paginator.get_page(page_number)
+
     if request.method == 'POST':
         sign_up_form = SignUpForm(request.POST)
         # profile_form = ProfileForm(request.POST)
@@ -199,7 +204,7 @@ def user_detail(request, pk):
             'is_it_him': profile,
             'user_view': user_view,
             'detail': user_details,
-            'comments': comments,
+            'comments': page_comments,
             'sign_up_form': sign_up_form,
         }
 
@@ -280,9 +285,13 @@ def website_list_view(request):
         sign_up_form = SignUpForm()
 
     website = Website.objects.all()
+    paginator = Paginator(website, 1)  # Show 5 contacts per page.
+
+    page_number = request.GET.get('page')
+    page_websites = paginator.get_page(page_number)
 
     context = {
-        'website_list': website,
+        'website_list': page_websites,
         'sign_up_form': sign_up_form,
     }
 

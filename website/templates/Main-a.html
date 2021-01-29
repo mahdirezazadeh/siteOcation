@@ -40,10 +40,13 @@ body {
 }
 
 .user{
+    width: 12%;
+    heght: 12%;
+    border-radius: 100%;
     cursor: pointer;
     float: left;
     margin-left: 4%;
-    margin-top: 4%;
+    padding-bottom: 5%;
 }
 
 .userName{
@@ -399,17 +402,16 @@ input[type=text], input[type=password] ,input[type=email]{
                 {% if user.is_authenticated %}
 					<div>
 						<a style="cursor: default; text-decoration: none; padding: 0; color: #010101;" href="{{ user.profile.get_absolute_url }}">
-<!--							<img class="user" src="{% static 'images/136-1366211_group-of-10-guys-login-user-icon-png.png' %}">-->
+							<img class="user" src="{% static 'images/userimage2.png' %}">
 							<h4 class="userName">{{ user.username }}</h4>
 						</a>
-					</div>
-                    <div style="float: left;">
-                        <a class="kharab" href="{% url 'logout'%}?next={{request.path}}">
-                            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                        <a href="{% url 'logout'%}?next={{request.path}}">
+                            <button class="button" style="width: auto; float: right; position: absolut;">
                                 Logout
                             </button>
                         </a>
-                    </div>
+					</div>
+
 
                 {% else %}
 					<button class="button" onclick="document.getElementById('login').style.display='block'"

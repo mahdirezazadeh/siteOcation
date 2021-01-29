@@ -385,7 +385,6 @@ label{
 
 .pagination {
     padding: 20px;
-    margin-left: 15%;
     display: inline-block;
 }
 
@@ -473,7 +472,7 @@ label{
 
 {% block content %}
 <div class="Body">
-    <div style="width: 50%; margin-left: 25%; padding-bottom: 50px;" class="w3-content">
+    <div style="width: 50%; margin-left: 25%; padding-bottom: 50px; text-align: center;" class="w3-content">
       {% for website in website_list %}
           <div class="mySlides2">
               <a class="Comment" href="{{ website.get_absolute_url }}">{{ website.name }}</a><br>
@@ -483,19 +482,24 @@ label{
           </div>
       {% endfor %}
 
-        <div>
-            <div class="pagination">
-              <a href="#">&laquo;</a>
-              <a href="#">1</a>
-              <a href="#" class="active">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
-              <a href="#">6</a>
-              <a href="#">&raquo;</a>
-            </div>
-        </div>
+        <div class="pagination">
+            <span class="step-links">
+                {% if website_list.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ website_list.previous_page_number }}" style="width: 100px; ">previous</a>
+                {% endif %}
 
+                {% if website_list.has_next %}
+                    <a href="?page={{ website_list.next_page_number }}" style="width: 100px;">next</a>
+                    <a href="?page={{ website_list.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+
+
+        </div>
+        <p class="current most1" style="margin: 0;">
+            Page {{ website_list.number }} of {{ website_list.paginator.num_pages }}.
+        </p>
     </div>
 </div>
 {% endblock %}
