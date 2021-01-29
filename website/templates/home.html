@@ -9,10 +9,10 @@
     <input class="input" style="width: 50%; margin-left: 25%;" type="text" placeholder="Search For Website">
     <button class="searchBtn"><img class="searchPic" src="{% static 'images/search.png' %}"></button>
 
-    <div class="commentPlace">
+    <div class="commentPlace" style="padding: 1.25% 0;">
         <div style="width: 95%; margin-left: 2.5%;" class="w3-content">
             {% for comment in recent_comments %}
-            <div class="mySlides">
+            <div class="mySlides" style="margin-top: 0;">
                 <div>
                     <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                     <a class="next" onclick="plusSlides(1)">&#10095;</a>

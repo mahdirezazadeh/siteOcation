@@ -78,8 +78,6 @@ body {
 
 .userName{
     cursor: default;
-    margin-left: 14%;
-    padding-top: 4%;
     font-weight: bold;
 }
 
@@ -408,16 +406,6 @@ label{
     color: #333333;
 }
 
-.pagination a:last-child {
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-}
-
-.pagination a:first-child {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
 .input{
     background-color: #f1f1f1;
     color: #FCA311;
@@ -474,7 +462,7 @@ label{
 <div class="Body">
     <div style="width: 50%; margin-left: 25%; padding-bottom: 50px; text-align: center;" class="w3-content">
       {% for website in website_list %}
-          <div class="mySlides2">
+          <div class="mySlides2" style="margin-top: 3%;">
               <a class="Comment" href="{{ website.get_absolute_url }}">{{ website.name }}</a><br>
               <p class="most1">Description :</br>{{ website.description }}</p>
               <p class="most1">Date of Establishment : {{ website.founded }}</p>
