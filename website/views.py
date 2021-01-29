@@ -177,22 +177,31 @@ def user_detail(request, pk):
     else:
         profile = False
 
-    if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        if user_form.is_valid():
-            user_form.save()
-            return HttpResponseRedirect(reverse('user-detail', request.user.id))
-    else:
-        user_form = UserForm(instance=request.user)
+    if request.user.is_authenticated:
+        if request.method == 'POST':
+            user_form = UserForm(request.POST, instance=request.user)
+            if user_form.is_valid():
+                user_form.save()
+                return HttpResponseRedirect(reverse('user-detail', request.user.id))
+        else:
+            user_form = UserForm(instance=request.user)
 
-    context = {
-        'is_it_him': profile,
-        'user_view': user_view,
-        'detail': user_details,
-        'comments': comments,
-        'user_form': user_form,
-        'sign_up_form': sign_up_form,
-    }
+        context = {
+            'is_it_him': profile,
+            'user_view': user_view,
+            'detail': user_details,
+            'comments': comments,
+            'user_form': user_form,
+            'sign_up_form': sign_up_form,
+        }
+    else:
+        context = {
+            'is_it_him': profile,
+            'user_view': user_view,
+            'detail': user_details,
+            'comments': comments,
+            'sign_up_form': sign_up_form,
+        }
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'user_detail.html', context=context)
