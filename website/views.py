@@ -204,7 +204,7 @@ def user_detail(request, pk):
             'is_it_him': profile,
             'user_view': user_view,
             'detail': user_details,
-            'comments': page_comments,
+            'comments': comments,
             'sign_up_form': sign_up_form,
         }
 
@@ -285,7 +285,7 @@ def website_list_view(request):
         sign_up_form = SignUpForm()
 
     website = Website.objects.all()
-    paginator = Paginator(website, 1)  # Show 5 contacts per page.
+    paginator = Paginator(website, 8)
 
     page_number = request.GET.get('page')
     page_websites = paginator.get_page(page_number)

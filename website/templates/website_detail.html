@@ -31,7 +31,7 @@ body {
     background-color: #6d6d6d;
     border-radius: 20px;
     margin: 5% 5%;
-    padding: 1% 1%;
+    padding: 1% 3%;
 }
 
 .addWebsite{
@@ -337,15 +337,15 @@ label{
 
 {% block content %}
 <div class="Body">
-    <div style="width: 50%; margin-left: 25%; margin-top: 2%;" class="w3-content">
+    <div style="width: 50%; margin-left: 25%; margin-top: 2%; align-items: center;" class="w3-content">
         {% if user.is_authenticated %}
-        <button class="addWebsite" style="-ms-transform: translate(-50%, -30%); transform: translate(-75%, 00%);" onclick="document.getElementById('addComment').style.display='block'">Add Comment</button>
+        <button class="addWebsite" onclick="document.getElementById('addComment').style.display='block'">Add Comment</button>
         <div id="addComment" class="modal">
           <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
             {% csrf_token %}
             <div style="border-radius: 20px 20px 0px 0px;" class="container">
 
-              <label style="color: #f1f1f1; font-weight: bold;"><b>Description</b></label>
+              <label style="color: #888888; font-weight: bold;"><b>Description</b></label>
               {% render_field comment_form.comment class="input" rows="auto" style="width: 100%" %}
 <!--              <textarea class="input" name="Description" rows="auto" cols="100"></textarea>-->
 
@@ -380,10 +380,10 @@ label{
             {% endif %}
 
         </div>
-        <div class="commentPlace">
+        <div class="commentPlace" style="margin: 5% 0%;">
 
             {% for comment in comments %}
-                <div class="mySlides2">
+                <div class="mySlides2" style="width: 100%; margin-top: 1.5%;">
                     <a class="website-tag-comment" href="{{ comment.website_id.get_absolute_url }}">
                         {{ comment.website_id }}
                     </a><br>
