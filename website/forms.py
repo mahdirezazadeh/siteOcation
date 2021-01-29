@@ -5,6 +5,11 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserChangeForm
+from .models import Profile
+from .models import Comment
+from .models import Website
 
 
 class RenewLogin(forms.Form):
@@ -27,36 +32,51 @@ class RenewLogin(forms.Form):
         return data
 
 
-class Join(forms.Form):
-    username = forms.CharField(max_length=150,
-                               help_text=_('Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'),
-                               error_messages={
-                                   'unique': _("A user with that username already exists."),
-                               },
-                               validators=[User.username_validator, ],
-                               required=True,
-                               )
+class SignUpForm(UserCreationForm):
+    first_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
+    last_name = forms.CharField(max_length=30, required=False, help_text='Optional.')
+    email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
 
-    email = forms.EmailField(max_length=150, required=True, )
-    name = forms.CharField(max_length=150, required=True)
-    last_name = forms.CharField(max_length=150, required=True)
-    password = forms.PasswordInput()
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'password1', 'password2',)
 
-    def check_username(self):
-        u_name = self.cleaned_data['username']
-        u_names = User.objects.get(username=u_name)
 
-        # Check for username minimum length
-        if len(u_name) < 4:
-            raise ValidationError(_('Username must be more than 3 character!'))
+class ProfileForm(forms.ModelForm):
+    bio = forms.CharField(max_length=50, required=False, )
+    date_of_birth = forms.DateField(required=False, )
+    user_picture = forms.ImageField(required=False, )
 
-        # Check for username maximum length
-        if len(u_name) > 150:
-            raise ValidationError(_('Username can not be more than 150 character!'))
+    class Meta:
+        model = Profile
+        fields = ('bio', 'date_of_birth', 'user_picture', )
 
-        # Check for username being unique
-        if u_names is not None:
-            raise ValidationError(_('A user with that username already exists.'))
 
-        # return valid username
-        return u_name
+class AddComment(forms.ModelForm):
+    comment = forms.CharField(max_length=600)
+
+    class Meta:
+        model = Comment
+        fields = ('comment', )
+
+
+class AddWebsite(forms.ModelForm):
+    description = forms.CharField(max_length=1000)
+    founded = forms.DateField(help_text='Enter a date that the website have been created.', )
+
+    class Meta:
+        model = Website
+        fields = ('website_domain_name', 'name', 'description', 'founded', 'numberOfEmployees', 'description')
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name',)
+
+# class Join(forms.ModelForm):
+#
+#     class Meta:
+#         model =
+#         field
+
