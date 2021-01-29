@@ -390,18 +390,25 @@ label{
                 </div>
             {% endfor %}
         </div>
-        <div>
-            <div class="pagination">
-              <a href="#">&laquo;</a>
-              <a href="#">1</a>
-              <a href="#" class="active">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
-              <a href="#">6</a>
-              <a href="#">&raquo;</a>
-            </div>
+
+        <div class="pagination">
+            <span class="step-links">
+                {% if comments.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ comments.previous_page_number }}" style="width: 100px; ">previous</a>
+                {% endif %}
+
+                {% if comments.has_next %}
+                    <a href="?page={{ comments.next_page_number }}" style="width: 100px;">next</a>
+                    <a href="?page={{ comments.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+
+
         </div>
+        <p class="current most1" style="margin: 0;">
+            Page {{ comments.number }} of {{ comments.paginator.num_pages }}.
+        </p>
     </div>
 </div>
 

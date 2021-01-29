@@ -153,10 +153,10 @@ def user_detail(request, pk):
     user_details = Profile.objects.get(user_id=user_view.id)
 
     comments = reversed(Comment.objects.filter(user_id=user_view.id, reply=None))
-
-    paginator = Paginator(comments, 5)  # Show 25 contacts per page.
-    page_number = request.GET.get('page')
-    page_comments = paginator.get_page(page_number)
+    #
+    # paginator = Paginator(comments, 5)  # Show 25 contacts per page.
+    # page_number = request.GET.get('page')
+    # page_comments = paginator.get_page(page_number)
 
     if request.method == 'POST':
         sign_up_form = SignUpForm(request.POST)
@@ -182,7 +182,7 @@ def user_detail(request, pk):
     else:
         profile = False
 
-    if request.user.is_authenticated:
+    if profile:
         if request.method == 'POST':
             user_form = UserForm(request.POST, instance=request.user)
             if user_form.is_valid():
