@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load widget_tweaks %}
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,11 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>{% block title %}SiteOcation{% endblock %}</title>
     <style>
+    {% block style %}{% endblock %}
 body {
-    height: auto;
+    height: 60%;
     font-family: 'Poppins', sans-serif; margin: 0;
     margin: 0px;
-    background: #f1f1f1 url(../../media/image/BackGround/BG.png) repeat fixed center;
+    background: #f1f1f1 url({% static 'images/BG.png' %}) fixed center;
 }
 
 .like{
@@ -170,12 +172,16 @@ body {
     color: #888888;
 }
 
+{% block commentplace %}
+
 .commentPlace{
     background-color: #6d6d6d;
     border-radius: 20px;
     margin: 5% 24%;
     padding: 1% 0px;
 }
+{% endblock %}
+
 
 .searchPic{
     max-width: 50px;
@@ -278,12 +284,12 @@ label{
 }
 
 .Footer{
-    font-family: 'Poppins';
     padding: -10px 0px 10px 10px;
     background-color: #d6d6d6;
     height: 20%;
     width: 100%;
-    margin: 0px;
+    margin-top: 19%;
+    margin-left: 0;
 }
 
 .developers{
@@ -338,7 +344,7 @@ label{
   color: #010101;
 }
 
-.input{
+input{
     background-color: #f1f1f1;
     color: #FCA311;
     margin-bottom: 28px;
@@ -387,12 +393,13 @@ input[type=text], input[type=password] ,input[type=email]{
 <body>
 
 <div class="Header">
+    <br>
     <div style="width: 100%;">
         <div style="float: left; width: 40%">
                 {% if user.is_authenticated %}
 					<div>
-						<a style="cursor: default; text-decoration: none; padding: 0; color: #010101;" href="/user/">
-							<img class="user" src="../../media/image/User/Asset%201_1@1x.png">
+						<a style="cursor: default; text-decoration: none; padding: 0; color: #010101;" href="{{ user.profile.get_absolute_url }}">
+<!--							<img class="user" src="{% static 'images/136-1366211_group-of-10-guys-login-user-icon-png.png' %}">-->
 							<h4 class="userName">{{ user.username }}</h4>
 						</a>
 					</div>
@@ -416,23 +423,28 @@ input[type=text], input[type=password] ,input[type=email]{
 				{% endif %}
         </div>
         <div style="float: right; width: 35%">
-        <a class="kharab" href="/contact/">
-            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
-                Contact
+        <a class="kharab" href="{% url 'websites' %}">
+            <button class="button"  style="margin: 40px 30px 40px 5px; width: auto; float: right;">
+                Websites
             </button>
-        </a>
-        <a class="kharab" href="/about/">
-            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
-                About
-            </button>
-        </a>
-        <a class="kharab" href="/main/">
+            </a>
+<!--        <a class="kharab" href="/contact/">-->
+<!--            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">-->
+<!--                Contact-->
+<!--            </button>-->
+<!--        </a>-->
+<!--        <a class="kharab" href="/about/">-->
+<!--            <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">-->
+<!--                About-->
+<!--            </button>-->
+<!--        </a>-->
+        <a class="kharab" href="{% url 'home' %}">
             <button class="button" style="margin: 40px 30px 40px 5px; width: auto; float: right;">
             Home
             </button>
         </a>
         </div>
-        <img class="logo" src="/media/image/logo/Asset%206@1x.png">
+        <img class="logo" src="{% static 'images/Asset 6@1x.png' %}">
     </div>
     <div id="createAccount" class="modal">
       <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
@@ -513,15 +525,13 @@ input[type=text], input[type=password] ,input[type=email]{
     </div>
 </div>
 
-
-
     {% block content %}{% endblock %}
 
 </div>
 <div class="Footer row">
     <div style="z-index: 1; padding: 20px 0px;" class="align-self-right developers">
-        <a class="a" style="float: right; margin-left: 10px;" href="contact.html">Contact Us</a>
-        <a class="a" style="float: right;" href="about.html">About Us</a>
+        <a class="a" style="float: right; margin-left: 10px;" href="/contact/">Contact Us</a>
+        <a class="a" style="float: right;" href="/about/">About Us</a>
     </div>
     <div style="position: absolute" class="align-self-center developers">
         2020 Created By SiteOcation Group
@@ -529,80 +539,6 @@ input[type=text], input[type=password] ,input[type=email]{
 </div>
 
 {% block script %}
-<script>
-        var slideIndex = 0;
-        carousel();
-
-        function carousel() {
-          var i;
-          var x = document.getElementsByClassName("mySlides");
-          for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-          }
-          slideIndex++;
-          if (slideIndex > x.length) {slideIndex = 1}
-          x[slideIndex-1].style.display = "block";
-          setTimeout(carousel, 7000);
-        }
-        var slideIndex1 = 1;
-        showSlides(slideIndex1);
-
-        function plusSlides(n) {
-          showSlides(slideIndex1 += n);
-        }
-
-        function currentSlide(n) {
-          showSlides(slideIndex1 = n);
-        }
-
-        function showSlides(n) {
-          var i;
-          var slides = document.getElementsByClassName("mySlides");
-          if (n > slides.length) {slideIndex1 = 1}
-          if (n < 1) {slideIndex1 = slides.length}
-          for (i = 0; i < slides.length; i++) {
-              slides[i].style.display = "none";
-          }
-          slides[slideIndex1 -1].style.display = "block";
-        }
-
-
-        var slideIndex2 = 0;
-        carousel1();
-
-        function carousel1() {
-          var i;
-          var x = document.getElementsByClassName("mySlides2");
-          for (i = 0; i < x.length; i++) {
-            x[i].style.display = "none";
-          }
-          slideIndex2++;
-          if (slideIndex2 > x.length) {slideIndex2 = 1}
-          x[slideIndex2-1].style.display = "block";
-          setTimeout(carousel1, 7000);
-        }
-        var slideIndex3 = 1;
-        showSlides1(slideIndex3);
-
-        function plusSlides1(n) {
-          showSlides1(slideIndex3 += n);
-        }
-
-        function currentSlide1(n) {
-          showSlides1(slideIndex3 = n);
-        }
-
-        function showSlides1(n) {
-          var i;
-          var slides = document.getElementsByClassName("mySlides2");
-          if (n > slides.length) {slideIndex3 = 1}
-          if (n < 1) {slideIndex3 = slides.length}
-          for (i = 0; i < slides.length; i++) {
-              slides[i].style.display = "none";
-          }
-          slides[slideIndex3 -1].style.display = "block";
-        }
-    </script>
 {% endblock %}
 
 </body>
