@@ -1,17 +1,27 @@
 # from django.http import Http404
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
 import datetime
+from django.utils import timezone
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth import login
+from django.contrib.auth import authenticate
 
-from django.contrib.auth.models import User as User_in_built
+from django.contrib.auth.models import User
+from website.forms import SignUpForm
+from website.forms import AddComment
+from website.forms import UserForm
+from website.forms import AddWebsite
+
 from django.views import generic
 from website.models import Website
 from website.models import Profile
 from website.models import Comment
+from website.models import AreaServed
 
 from website.forms import RenewLogin
 # from website.models import Industry
@@ -26,31 +36,54 @@ def home(request):
     # Is user logged in?
     is_logged = request.session.get('is_logged', False)
 
-    # Generate counts of some of the main objects
-    num_websites = Website.objects.all().count()
-
-    # Available books (status = 'a')
-    num_worldwide_websites = Website.objects.filter(areaServed__exact='World wide').count()
-
-    # The 'all()' is implied by default.
-    num_users = Profile.objects.count()
-
     # websites = Website.objects.all()
 
     recent_comments = Comment.objects.order_by('-modified')[:10]
 
     liked_comments = Comment.objects.order_by('-likes')[:10]
 
+    if request.method == 'POST':
+        sign_up_form = SignUpForm(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if sign_up_form.is_valid():
+            user_saved = sign_up_form.save()
+            user_saved.refresh_from_db()
+            user_saved.save()
+
+            username = sign_up_form.cleaned_data.get('username')
+            raw_password = sign_up_form.cleaned_data.get('password1')
+
+            user = authenticate(username=username, password=raw_password)
+            # profile = profile_form.user()
+            login(request, user)
+
+            return redirect('home')
+    else:
+        sign_up_form = SignUpForm()
+
+    if request.method == 'POST':
+        add_website = AddWebsite(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if add_website.is_valid():
+            saved_website = add_website.save(commit=False)
+            saved_website.writen_by = request.user.profile
+            # saved_website.modified = timezone.now
+            #
+            # saved_website.founded = AddWebsite.cleaned_data('founded')
+            # saved_website.areaServed = AreaServed.objects.get(name='world wide')
+            saved_website.save()
+
+            return redirect('home')
+    else:
+        add_website = AddWebsite()
+
     context = {
-        'num_websites': num_websites,
-        'num_worldwide_websites': num_worldwide_websites,
-        'num_users': num_users,
-        # 'websites': websites,
         'recent_comments': recent_comments,
         'is_logged': is_logged,
         'liked_comments': liked_comments,
+        'sign_up_form': sign_up_form,
+        'add_website': add_website,
     }
-
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'home.html', context=context)
 
@@ -63,9 +96,47 @@ def website_detail(request, pk):
 
     comments = reversed(Comment.objects.filter(website_id=pk, reply=None))
 
+    # create Account form
+    if request.method == 'POST':
+        sign_up_form = SignUpForm(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if sign_up_form.is_valid():
+            user_saved = sign_up_form.save()
+            user_saved.refresh_from_db()
+
+            user_saved.save()
+
+            username = sign_up_form.cleaned_data.get('username')
+            raw_password = sign_up_form.cleaned_data.get('password1')
+
+            user = authenticate(username=username, password=raw_password)
+            # profile = profile_form.user()
+            login(request, user)
+
+            return redirect(website.get_absolute_url())
+    else:
+        sign_up_form = SignUpForm()
+
+    # add comment form
+    if request.method == 'POST':
+        comment_form = AddComment(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if comment_form.is_valid():
+            comment = comment_form.save(commit=False)
+            comment.user_id = request.user.profile
+            comment.website_id = website
+            comment.modified = timezone.now()
+            comment.comment = comment.comment
+            comment_form.save()
+            return redirect(website.get_absolute_url())
+    else:
+        comment_form = AddComment()
+
     context = {
         'website': website,
         'comments': comments,
+        'sign_up_form': sign_up_form,
+        'comment_form': comment_form,
     }
 
     # Render the HTML template index.html with the data in the context variable
@@ -76,16 +147,51 @@ def user_detail(request, pk):
     """View function for home page of site."""
 
     # Available books (status = 'a')
-    user = User_in_built.objects.get(id=pk)
+    user_view = User.objects.get(id=pk)
 
-    user_details = Profile.objects.get(user_id=user.id)
+    user_details = Profile.objects.get(user_id=user_view.id)
 
-    comments = reversed(Comment.objects.filter(user_id=user.id, reply=None))
+    comments = reversed(Comment.objects.filter(user_id=user_view.id, reply=None))
+
+    if request.method == 'POST':
+        sign_up_form = SignUpForm(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if sign_up_form.is_valid():
+            user_saved = sign_up_form.save()
+            user_saved.refresh_from_db()
+            user_saved.save()
+
+            username = sign_up_form.cleaned_data.get('username')
+            raw_password = sign_up_form.cleaned_data.get('password1')
+
+            user = authenticate(username=username, password=raw_password)
+            # profile = profile_form.user()
+            login(request, user)
+
+            return redirect('home')
+    else:
+        sign_up_form = SignUpForm()
+
+    if request.user == user_view:
+        profile = True
+    else:
+        profile = False
+
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            return HttpResponseRedirect(reverse('user-detail', request.user.id))
+    else:
+        user_form = UserForm(instance=request.user)
 
     context = {
-        'userview': user,
+        'is_it_him': profile,
+        'user_view': user_view,
         'detail': user_details,
         'comments': comments,
+        'user_form': user_form,
+        'sign_up_form': sign_up_form,
     }
 
     # Render the HTML template index.html with the data in the context variable
@@ -93,17 +199,91 @@ def user_detail(request, pk):
 
 
 def about(request):
-    return render(request, 'about-a.html')
+    if request.method == 'POST':
+        sign_up_form = SignUpForm(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if sign_up_form.is_valid():
+            user_saved = sign_up_form.save()
+            user_saved.refresh_from_db()
+            user_saved.save()
+
+            username = sign_up_form.cleaned_data.get('username')
+            raw_password = sign_up_form.cleaned_data.get('password1')
+
+            user = authenticate(username=username, password=raw_password)
+            # profile = profile_form.user()
+            login(request, user)
+
+            return redirect('home/websites')
+    else:
+        sign_up_form = SignUpForm()
+
+    context = {
+        'sign_up_form': sign_up_form,
+    }
+    return render(request, 'about-a.html', context=context)
 
 
 def contact(request):
-    return render(request, 'contact.html')
+    if request.method == 'POST':
+        sign_up_form = SignUpForm(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if sign_up_form.is_valid():
+            user_saved = sign_up_form.save()
+            user_saved.refresh_from_db()
+            user_saved.save()
+
+            username = sign_up_form.cleaned_data.get('username')
+            raw_password = sign_up_form.cleaned_data.get('password1')
+
+            user = authenticate(username=username, password=raw_password)
+            # profile = profile_form.user()
+            login(request, user)
+
+            return redirect('home/websites')
+    else:
+        sign_up_form = SignUpForm()
+
+    context = {
+        'sign_up_form': sign_up_form,
+    }
+    return render(request, 'contact.html', context=context)
 
 
-class WebsiteListView(generic.ListView):
-    model = Website
-    template_name = 'website/website_list.html'
-    paginate_by = 3
+def website_list_view(request):
+    if request.method == 'POST':
+        sign_up_form = SignUpForm(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if sign_up_form.is_valid():
+            user_saved = sign_up_form.save()
+            user_saved.refresh_from_db()
+            user_saved.save()
+
+            username = sign_up_form.cleaned_data.get('username')
+            raw_password = sign_up_form.cleaned_data.get('password1')
+
+            user = authenticate(username=username, password=raw_password)
+            # profile = profile_form.user()
+            login(request, user)
+
+            return redirect('home/websites')
+    else:
+        sign_up_form = SignUpForm()
+
+    website = Website.objects.all()
+
+    context = {
+        'website_list': website,
+        'sign_up_form': sign_up_form,
+    }
+
+    return render(request, 'website_list.html', context=context)
+
+
+# class WebsiteListView(generic.ListView):
+#     model = Website
+#     template_name = 'website/website_list.html'
+#     paginate_by = 3
     # context_object_name = 'my_book_list'  # your own name for the list as a template variable
     # queryset = Book.objects.filter(title__icontains='war')[:5]  # Get 5 books containing the title war
     # template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location
