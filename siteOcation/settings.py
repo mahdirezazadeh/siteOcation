@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 from os.path import join
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -24,6 +24,10 @@ SECRET_KEY = 'n(b6=6k!f#6qwt&1k6kr+8h&bi5&hxb((w3jtpjy4+mlb^ij!o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+
+if not DEBUG:
+    BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 ALLOWED_HOSTS = []
 
@@ -40,6 +44,7 @@ INSTALLED_APPS = [
     # Add our new application
     # This object was created for us in /website/apps.py
     'website.apps.WebsiteConfig',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +86,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
+    'OPTIONS': {'charset': 'utf8mb4'},
 }
 
 
@@ -109,7 +115,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -122,6 +128,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "static"),
+)
+
+MEDIA_ROOT = (
+    BASE_DIR,
+    )
+
+MEDIA_URL = '/media/'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/home/'
