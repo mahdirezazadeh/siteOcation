@@ -22,15 +22,17 @@ from django.conf import settings
 from django.conf.urls.static import static
 from website import views as website_veiws
 
-
+# url for admin page
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
+# url for home
 urlpatterns += [
     path('home/', include('website.urls')),
 ]
 
+# urls for website , user , about and contact
 urlpatterns += [
     path('', RedirectView.as_view(url='home/', permanent=True)),
     path('website/<pk>/', website_veiws.website_detail, name='website-detail'),
@@ -47,6 +49,7 @@ urlpatterns += [
 # Use static() to add url mapping to serve static files during development (only)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
+# url for accounts
 urlpatterns += [
     path('accounts/', include('django.contrib.auth.urls')),
 ]

@@ -12,11 +12,14 @@ from .models import CommentDislike
 
 
 # Register your models here.
+
+# Website model
 class WebsiteAdmin(admin.ModelAdmin):
     list_display = ('website_domain_name', 'name', 'writen_by')
     list_filter = ('industry', 'areaServed')
 
 
+# Comment model
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('get_username', 'website_id', 'comment_id', 'reply')
 
@@ -25,6 +28,7 @@ class CommentAdmin(admin.ModelAdmin):
     get_username.short_description = 'User'
 
 
+# Profile model
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('get_username', 'get_last_name', 'get_first_name', 'get_email')
 
