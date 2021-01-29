@@ -1,20 +1,426 @@
 {% extends "main-a.html" %}
-{% block title %}<title>website detail</title>{% endblock %}
+
+{% load widget_tweaks %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/website.css' %}">
+
+{% block title %}{{ website.name }} detail</title>{% endblock %}
+{% block style %}
+body {
+    height: auto;
+    background: url(../../media/image/BackGround/BG.png) repeat fixed center;
+    font-family: 'Poppins', sans-serif; margin: 0;
+    margin: 0px;
+    background-color: #f1f1f1;
+}
+
+.like{
+  font-size: 25px;
+  background-color: #333333;
+  border: none;
+  cursor: pointer;
+  color: #888888;
+}
+
+.likey{
+    width: 50%;
+    margin-left: 25%;
+}
+
+.commentPlace{
+    background-color: #6d6d6d;
+    border-radius: 20px;
+    margin: 5% 5%;
+    padding: 1% 1%;
+}
+
+.addWebsite{
+    color: #FCA311;
+    font-weight: bold;
+    border-radius: 25px;
+    background-color: #333333;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    margin-left: 30%;
+    padding: 10px 5px;
+}
+
+.addWebsite:hover{
+    font-weight: bold;
+    color: #333333;
+    background-color: #FCA311;
+}
+
+.like:hover {
+    color: #a90b0b;
+    background-color: #333333;
+}
+
+.like-count{
+    float: left;
+    margin-top: 10px;
+    color: #888888;
+}
+
+.dislike-count{
+    float: right;
+    margin-top: 10px;
+    color: #888888;
+}
+
+.Comment{
+    text-decoration: none;
+    font-size: large;
+    font-weight: bold;
+    color: #FCA311;
+}
+
+.Comment:hover{
+    cursor: pointer;
+    color: #FCA311;
+}
+
+.most{
+    padding: 30px;
+    color: #FCA311;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.most1{
+    margin: 30px 10% 0px 10%;
+    color: #888888;
+    font-weight: bold;
+    font-size: larger;
+}
+
+.most1::selection{
+    color: #FCA311;
+    background-color: #888888;
+}
+
+.most::selection{
+    color: #FCA311;
+    background-color: #888888;
+}
+
+.mySlides{
+    padding: 15px 10px;
+    border-radius: 25px;
+    text-align: center;
+    background-color: #333333;
+    margin: 10% 0px 0px 0px;
+}
+
+.mySlides2{
+    padding: 15px 10px;
+    border-radius: 25px;
+    text-align: center;
+    background-color: #333333;
+    margin: 1% 0px 1% 0px;
+}
+
+.p-comment{
+    padding-top: 30px;
+    text-align: center;
+    color: #888888;
+}
+
+input[type=text], input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+    font-family: 'Poppins';
+}
+
+.button {
+  font-weight: bold;
+  border-radius: 25px;
+  background-color: #ffffff;
+  color: #FCA311;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:link, .button:visited {
+  background-color: #E5E5E5;
+  color: #FCA311;
+  border: 2px solid #FCA311;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.button:hover, .button:active {
+  background-color: #FCA311;
+  color: #E5E5E5;
+}
+
+.a:link, .a:visited {
+  background-color: #E5E5E5;
+  color: #FCA311;
+  border: 2px solid #FCA311;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.a:hover, .a:active {
+  background-color: #FCA311;
+  color: #E5E5E5;
+}
+
+a{
+    border-radius: 25px;
+    height: auto;
+    width: auto;
+    padding: 14px 20px;
+    font-size: small;
+}
+
+label{
+    font-family: 'Poppins';
+    color: #010101;
+    opacity: 70%;
+}
+
+.cancelbtn {
+    font-weight: bold;
+  border-radius: 25px;
+  color: #FCA311;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: auto;
+  background-color: #f1f1f1;
+}
+
+.Body{
+    font-family: 'Poppins';
+    padding: -10px 0px 10px 10px;
+    height: 60%;
+    width: 100%;
+}
+.container {
+  border-radius: 25px;
+  position: relative;
+  padding: 16px;
+  background-color: #333333;
+}
+
+.modal {
+    font-family: 'Poppins';
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+  padding-top: 60px;
+}
+
+.modal-content {
+    font-family: 'Poppins';
+  box-shadow: 5px 5px #888888;
+  background-color: #fefefe;
+  margin: 5% auto 15% auto;
+  border: 1px solid #888;
+  width: 40%;
+}
+
+::placeholder{
+    font-family: 'Poppins';
+  color: #010101;
+}
+
+.pagination {
+    padding: 20px;
+    margin-left: 15%;
+    display: inline-block;
+}
+
+.pagination a {
+  margin: 10px;
+  color: #FCA311;
+  background-color: #333333;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px ;
+}
+
+.pagination a.active {
+  background-color: #FCA311;
+  color: #333333;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #FCA311;
+    color: #333333;
+}
+
+.pagination a:last-child {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.pagination a:first-child {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.input{
+    background-color: #f1f1f1;
+    color: #FCA311;
+    margin-bottom: 28px;
+    border-radius: 25px;
+}
+
+.input[type=text] {
+  background-color: #f1f1f1;
+  color: #FCA311;
+  font-weight: bold;
+}
+
+.input[type=text]::placeholder {
+  background-color: #f1f1f1;
+  color: #FCA311;
+  font-weight: bold;
+}
+
+.input[type=password] {
+  background-color: #f1f1f1;
+  color: #FCA311;
+  font-weight: bold;
+}
+
+.input[type=password]::placeholder {
+  background-color: #f1f1f1;
+  color: #FCA311;
+  font-weight: bold;
+}
+
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)}
+  to {-webkit-transform: scale(1)}
+}
+
+@keyframes animatezoom {
+  from {transform: scale(0)}
+  to {transform: scale(1)}
+}
+
+@media screen and (max-width: 300px) {
+  span.psw {
+     display: block;
+     float: none;
+  }
+  .cancelbtn {
+     width: 100%;
+  }
+}
+{% endblock %}
+
 {% block content %}
-    <h1>website detail.</h1>
-    <h2>
-        name: {{ website.website_domain_name }}
-    </h2>
-    <br><br><br>
-    <p>_____________________________________________________________________________</p>
-    {% for comment in comments %}
-        <a href="{{ comment.user_id.get_absolute_url }}">
-                @{{ comment.user_id.user.username }}
-            </a>
-        <br>
-          <p>{{ comment.comment }}</p>
-            <br>
-            <p>_____________________________________________________________________________</p>
-            <br><br>
-    {% endfor %}
+<div class="Body">
+    <div style="width: 50%; margin-left: 25%; margin-top: 2%;" class="w3-content">
+        {% if user.is_authenticated %}
+        <button class="addWebsite" style="-ms-transform: translate(-50%, -30%); transform: translate(-75%, 00%);" onclick="document.getElementById('addComment').style.display='block'">Add Comment</button>
+        <div id="addComment" class="modal">
+          <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
+            {% csrf_token %}
+            <div style="border-radius: 20px 20px 0px 0px;" class="container">
+
+              <label style="color: #f1f1f1; font-weight: bold;"><b>Description</b></label>
+              {% render_field comment_form.comment class="input" rows="auto" style="width: 100%" %}
+<!--              <textarea class="input" name="Description" rows="auto" cols="100"></textarea>-->
+
+            </div>
+
+            <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
+              <button type="button" onclick="document.getElementById('addComment').style.display='none'" class="cancelbtn">
+                  Cancel
+              </button>
+              <button class="button" type="submit" onclick="document.getElementById('addComment').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
+                  Add
+              </button>
+            </div>
+          </form>
+        </div>
+        {% endif %}
+
+        <div class="mySlides2">
+            <p class="most">{{ website.name }}</p>
+            <a class="a" href="{{ website.get_absolute_url }}"><b>{{ website.website_domain_name }}</b></a>
+            <p class="most1">Description :</br>{{ website.description }}</p>
+            <p class="most1" style="margin-top: 25px;">
+                {% for ind in website.industry.all %}
+                {{ ind.name }},
+                {% endfor %}
+            </p>
+            {% if website.founded %}
+            <p class="most1">Date of Establishment : {{ website.founded }}</p>
+            {% endif %}
+            {% if website.numberOfEmployees %}
+            <p class="most1">Employees Number: {{ website.numberOfEmployees }}</p>
+            {% endif %}
+
+        </div>
+        <div class="commentPlace">
+
+            {% for comment in comments %}
+                <div class="mySlides2">
+                    <a class="website-tag-comment" href="{{ comment.website_id.get_absolute_url }}">
+                        {{ comment.website_id }}
+                    </a><br>
+                    <a class="Comment" href="{{ comment.user_id.get_absolute_url }}">
+                        @{{ comment.user_id.user.username }}
+                    </a>
+                    <p class="p-comment">
+                        {{ comment.comment }}
+                    </p>
+                    <div class="likey">
+                        <p class="like-count">{{ comment.get_likes_count }}</p>
+                        <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
+                        {% if user.is_authenticated %}
+                            <button class="like"><span class="fa fa-thumbs-up"></span></button>
+                            <button class="like"><span class="fa fa-thumbs-down"></span></button>
+                        {% else %}
+                            <span class="fa fa-thumbs-up like2"></span>
+                            <span class="fa fa-thumbs-down like2"></span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div>
+            <div class="pagination">
+              <a href="#">&laquo;</a>
+              <a href="#">1</a>
+              <a href="#" class="active">2</a>
+              <a href="#">3</a>
+              <a href="#">4</a>
+              <a href="#">5</a>
+              <a href="#">6</a>
+              <a href="#">&raquo;</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}
