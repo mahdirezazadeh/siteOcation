@@ -6,9 +6,11 @@
 
 {% block content %}
 <div class="Body">
-    <input class="input" style="width: 50%; margin-left: 25%;" type="text" placeholder="Search For Website">
-    <button class="searchBtn"><img class="searchPic" src="{% static 'images/search.png' %}"></button>
-
+    <form method="post">
+        {% csrf_token %}
+        <input class="input" style="width: 50%; margin-left: 25%;" type="text" placeholder="Search For Website" name="input_search">
+        <button class="searchBtn" type="submit"><img class="searchPic" src="{% static 'images/search.png' %}"></button>
+    </form>
     <div class="commentPlace" style="padding: 1.25% 0;">
         <div style="width: 95%; margin-left: 2.5%;" class="w3-content">
             {% for comment in recent_comments %}
@@ -78,47 +80,8 @@
         </div>
         </div>
 
-        {% if user.is_authenticated %}
-        <button class="addWebsite" onclick="document.getElementById('websiteCreat').style.display='block'">Add New Website</button>
-        <div id="websiteCreat" class="modal">
-          <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
-            {% csrf_token %}
-            <div style="border-radius: 20px 20px 0px 0px;" class="container">
 
-              <label for="SiteName" style="float: left; width: 47%;"><b>Site Name</b></label>
-              <label for="SiteLink" style="float: right; width: 47%;"><b>Site Link</b></label>
-              {% render_field add_website.name class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter SiteName" %}
-<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter SiteName" name="SiteName" required>-->
 
-              {% render_field add_website.website_domain_name class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter SiteLink with out www. and .com" %}
-<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter SiteLink with out www. and .com" name="SiteLink" required>-->
-
-              <label for="DateOfEstablishment" style="float: left; width: 47%;"><b>Date of Establishment</b></label>
-              <label for="EmploeeyCount" style="float: right; width: 47%;"><b>Emploeey Count</b></label><br>
-
-              {% render_field add_website.founded class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter Date of Establishment" %}
-<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Date of Establishment" name="DateOfEstablishment">-->
-              {% render_field add_website.numberOfEmployees class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter Count of Employee" %}
-<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Count of Employee" name="EmploeeyCount" required>-->
-
-              <label for="psw"><b>Description</b></label>
-<!--              <textarea class="input" name="Description" rows="auto" cols="100" style="width: 100%;"></textarea>-->
-
-              {% render_field add_website.description class="input" name="Description" rows="auto" cols="100" %}
-
-            </div>
-
-            <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
-              <button type="button" onclick="document.getElementById('websiteCreat').style.display='none'" class="cancelbtn">
-                  Cancel
-              </button>
-              <button class="button" type="submit" onclick="document.getElementById('websiteCreat').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
-                  Create
-              </button>
-            </div>
-          </form>
-          {% endif %}
-    </div>
 </div>
 {% endblock %}
 

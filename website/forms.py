@@ -69,11 +69,21 @@ class AddWebsite(forms.ModelForm):
         fields = ('website_domain_name', 'name', 'description', 'founded', 'numberOfEmployees', 'description')
 
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'first_name', 'last_name',)
+class UserForm(UserChangeForm):
+    class Meta(UserChangeForm.Meta):
+        fields = ('username', 'email', 'first_name', 'last_name')
 
+
+class ResetPasswordForm(forms.Form):
+    old_password = forms.CharField()
+    new_password1 = forms.CharField()
+    new_password2 = forms.CharField()
+
+    def clean(self):
+        if 'new_password1' in self.cleaned_data and 'new_password2' in self.cleaned_data:
+            if self.cleaned_data['new_password1'] != self.cleaned_data['new_password2']:
+                raise forms.ValidationError(_("The two password fields did not match."))
+        return self.cleaned_data
 # class Join(forms.ModelForm):
 #
 #     class Meta:

@@ -43,6 +43,7 @@ def home(request):
 
     liked_comments = Comment.objects.order_by('-likes')[:10]
 
+    # sign up form;
     if request.method == 'POST':
         sign_up_form = SignUpForm(request.POST)
         # profile_form = ProfileForm(request.POST)
@@ -62,28 +63,24 @@ def home(request):
     else:
         sign_up_form = SignUpForm()
 
+    # search form
     if request.method == 'POST':
-        add_website = AddWebsite(request.POST)
-        # profile_form = ProfileForm(request.POST)
-        if add_website.is_valid():
-            saved_website = add_website.save(commit=False)
-            saved_website.writen_by = request.user.profile
-            # saved_website.modified = timezone.now
-            #
-            # saved_website.founded = AddWebsite.cleaned_data('founded')
-            # saved_website.areaServed = AreaServed.objects.get(name='world wide')
-            saved_website.save()
-
-            return redirect('home')
-    else:
-        add_website = AddWebsite()
+        search_text = request.POST['input_search']
+        searched_websites_name = Website.objects.filter(name__icontains=search_text)
+        searched_websites_domain_name = Website.objects.filter(website_domain_name__icontains=search_text)
+        searched_websites = searched_websites_name | searched_websites_domain_name
+        context = {
+            'website_list': searched_websites,
+            'sign_up_form': sign_up_form,
+        }
+        # redirect to website list page
+        return render(request, 'website_list.html', context=context)
 
     context = {
         'recent_comments': recent_comments,
         'is_logged': is_logged,
         'liked_comments': liked_comments,
         'sign_up_form': sign_up_form,
-        'add_website': add_website,
     }
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'home.html', context=context)
@@ -95,7 +92,12 @@ def website_detail(request, pk):
     # Available books (status = 'a')
     website = Website.objects.get(website_domain_name=pk)
 
-    comments = reversed(Comment.objects.filter(website_id=pk, reply=None))
+    # comments_s = reversed(Comment.objects.filter(website_id=pk, reply=None))
+    comments_s = Comment.objects.filter(website_id=pk, reply=None, ).order_by('-modified')
+    paginator = Paginator(comments_s, 10)
+
+    page_number = request.GET.get('page')
+    comments = paginator.get_page(page_number)
 
     # create Account form
     if request.method == 'POST':
@@ -152,12 +154,13 @@ def user_detail(request, pk):
 
     user_details = Profile.objects.get(user_id=user_view.id)
 
-    comments = reversed(Comment.objects.filter(user_id=user_view.id, reply=None))
+    p_comments = Comment.objects.filter(user_id=user_view.id, reply=None).order_by('-modified')
     #
-    # paginator = Paginator(comments, 5)  # Show 25 contacts per page.
-    # page_number = request.GET.get('page')
-    # page_comments = paginator.get_page(page_number)
+    paginator = Paginator(p_comments, 10)  # Show 10 contacts per page.
+    page_number = request.GET.get('page')
+    comments = paginator.get_page(page_number)
 
+    # Sign up form
     if request.method == 'POST':
         sign_up_form = SignUpForm(request.POST)
         # profile_form = ProfileForm(request.POST)
@@ -177,22 +180,26 @@ def user_detail(request, pk):
     else:
         sign_up_form = SignUpForm()
 
+    # check that the user is looking his own profile
     if request.user == user_view:
-        profile = True
+        is_it_him = True
     else:
-        profile = False
+        is_it_him = False
 
-    if profile:
+    # if it is user profile, user must can be edit his own data
+    if is_it_him:
         if request.method == 'POST':
+            # Create a form instance and populate it with data from the request (binding):
             user_form = UserForm(request.POST, instance=request.user)
+
             if user_form.is_valid():
                 user_form.save()
-                return HttpResponseRedirect(reverse('user-detail', request.user.id))
+                # return HttpResponseRedirect(reverse('user-detail', request.user.id))
         else:
             user_form = UserForm(instance=request.user)
 
         context = {
-            'is_it_him': profile,
+            'is_it_him': is_it_him,
             'user_view': user_view,
             'detail': user_details,
             'comments': comments,
@@ -201,7 +208,7 @@ def user_detail(request, pk):
         }
     else:
         context = {
-            'is_it_him': profile,
+            'is_it_him': is_it_him,
             'user_view': user_view,
             'detail': user_details,
             'comments': comments,
@@ -265,6 +272,23 @@ def contact(request):
 
 
 def website_list_view(request):
+    # add website form
+    if request.method == 'POST':
+        add_website = AddWebsite(request.POST)
+        # profile_form = ProfileForm(request.POST)
+        if add_website.is_valid():
+            saved_website = add_website.save(commit=False)
+            saved_website.writen_by = request.user.profile
+            # saved_website.modified = timezone.now
+            #
+            # saved_website.founded = AddWebsite.cleaned_data('founded')
+            # saved_website.areaServed = AreaServed.objects.get(name='world wide')
+            saved_website.save()
+
+            return redirect('home')
+    else:
+        add_website = AddWebsite()
+
     if request.method == 'POST':
         sign_up_form = SignUpForm(request.POST)
         # profile_form = ProfileForm(request.POST)
@@ -284,8 +308,8 @@ def website_list_view(request):
     else:
         sign_up_form = SignUpForm()
 
-    website = Website.objects.all()
-    paginator = Paginator(website, 8)
+    website = Website.objects.order_by('-modified')
+    paginator = Paginator(website, 10)
 
     page_number = request.GET.get('page')
     page_websites = paginator.get_page(page_number)
@@ -293,6 +317,7 @@ def website_list_view(request):
     context = {
         'website_list': page_websites,
         'sign_up_form': sign_up_form,
+        'add_website': add_website,
     }
 
     return render(request, 'website_list.html', context=context)
@@ -342,33 +367,33 @@ def website_list_view(request):
     #
     #     return render(self, "website/website_detail.html", context={'website': website})
 
-
-@login_required
-def renew_user_login_date(request, pk):
-    user = get_object_or_404(Profile, pk=pk)
-    # If this is a POST request then process the Form data
-    if request.method == 'POST':
-
-        # Create a form instance and populate it with data from the request (binding):
-        form = RenewLogin(request.POST)
-
-        # Check if the form is valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
-            user.date_of_birth = form.cleaned_data['renew_date']
-            user.save()
-
-            # redirect to a new URL:
-            return HttpResponseRedirect(reverse('user-detail', args=[str(user.user.id)]))
-
-    # If this is a GET (or any other method) create the default form.
-    else:
-        proposed_renewal_date = datetime.date.today() - datetime.timedelta(weeks=52)
-        form = RenewLogin(initial={'renew_date': proposed_renewal_date})
-
-    context = {
-        'form': form,
-        'user_a': user,
-    }
-
-    return render(request, 'login_edit_time.html', context)
+#
+# @login_required
+# def renew_user_login_date(request, pk):
+#     user = get_object_or_404(Profile, pk=pk)
+#     # If this is a POST request then process the Form data
+#     if request.method == 'POST':
+#
+#         # Create a form instance and populate it with data from the request (binding):
+#         form = RenewLogin(request.POST)
+#
+#         # Check if the form is valid:
+#         if form.is_valid():
+#             # process the data in form.cleaned_data as required (here we just write it to the model due_back field)
+#             user.date_of_birth = form.cleaned_data['renew_date']
+#             user.save()
+#
+#             # redirect to a new URL:
+#             return HttpResponseRedirect(reverse('user-detail', args=[str(user.user.id)]))
+#
+#     # If this is a GET (or any other method) create the default form.
+#     else:
+#         proposed_renewal_date = datetime.date.today() - datetime.timedelta(weeks=52)
+#         form = RenewLogin(initial={'renew_date': proposed_renewal_date})
+#
+#     context = {
+#         'form': form,
+#         'user_a': user,
+#     }
+#
+#     return render(request, 'login_edit_time.html', context)

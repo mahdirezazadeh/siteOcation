@@ -1,6 +1,8 @@
 {% extends "main-a.html" %}
 {% load static %}
-{% block title %}<title>Websites List</title>{% endblock %}
+{% load widget_tweaks %}
+
+{% block title %}Websites List{% endblock %}
 {% block style %}
 body {
     height: auto;
@@ -459,7 +461,49 @@ label{
 {% endblock %}
 
 {% block content %}
-<div class="Body">
+    <div class="Body">
+        {% if user.is_authenticated %}
+        <button class="addWebsite" onclick="document.getElementById('websiteCreat').style.display='block'">Add New Website</button>
+        <div id="websiteCreat" class="modal">
+          <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
+            {% csrf_token %}
+            <div style="border-radius: 20px 20px 0px 0px;" class="container">
+
+              <label for="SiteName" style="float: left; width: 47%;"><b>Site Name</b></label>
+              <label for="SiteLink" style="float: right; width: 47%;"><b>Site Link</b></label>
+              {% render_field add_website.name class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter SiteName" %}
+<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter SiteName" name="SiteName" required>-->
+
+              {% render_field add_website.website_domain_name class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter SiteLink with out www. and .com" %}
+<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter SiteLink with out www. and .com" name="SiteLink" required>-->
+
+              <label for="DateOfEstablishment" style="float: left; width: 47%;"><b>Date of Establishment</b></label>
+              <label for="EmploeeyCount" style="float: right; width: 47%;"><b>Emploeey Count</b></label><br>
+
+              {% render_field add_website.founded class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter Date of Establishment" %}
+<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Date of Establishment" name="DateOfEstablishment">-->
+              {% render_field add_website.numberOfEmployees class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter Count of Employee" %}
+<!--              <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Count of Employee" name="EmploeeyCount" required>-->
+
+              <label for="psw"><b>Description</b></label>
+<!--              <textarea class="input" name="Description" rows="auto" cols="100" style="width: 100%;"></textarea>-->
+
+              {% render_field add_website.description class="input" name="Description" rows="auto" cols="100" %}
+
+            </div>
+
+            <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
+              <button type="button" onclick="document.getElementById('websiteCreat').style.display='none'" class="cancelbtn">
+                  Cancel
+              </button>
+              <button class="button" type="submit" onclick="document.getElementById('websiteCreat').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
+                  Create
+              </button>
+            </div>
+          </form>
+
+        </div>
+        {% endif %}
     <div style="width: 50%; margin-left: 25%; padding-bottom: 50px; text-align: center;" class="w3-content">
       {% for website in website_list %}
           <div class="mySlides2" style="margin-top: 3%;">
@@ -472,22 +516,31 @@ label{
 
         <div class="pagination">
             <span class="step-links">
+                    <a href="?page=1">&laquo; First</a>
                 {% if website_list.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ website_list.previous_page_number }}" style="width: 100px; ">previous</a>
+                    <a href="?page={{ website_list.previous_page_number }}" ><-</a>
                 {% endif %}
+
+                {% for i in website_list.paginator.page_range %}
+                  {% if website_list.number == i %}
+                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                  {% else %}
+                    <a href="?page={{ i }}">{{ i }}</a>
+                  {% endif %}
+                {% endfor %}
 
                 {% if website_list.has_next %}
-                    <a href="?page={{ website_list.next_page_number }}" style="width: 100px;">next</a>
-                    <a href="?page={{ website_list.paginator.num_pages }}">last &raquo;</a>
+                    <a href="?page={{ website_list.next_page_number }}" >-></a>
                 {% endif %}
+                    <a href="?page={{ website_list.paginator.num_pages }}">Last &raquo;</a>
             </span>
-
-
         </div>
-        <p class="current most1" style="margin: 0;">
-            Page {{ website_list.number }} of {{ website_list.paginator.num_pages }}.
-        </p>
+
+<!--        {% if website_list.number %}-->
+<!--        <p class="current most1" style="margin: 0;">-->
+<!--            Page {{ website_list.number }} of {{ website_list.paginator.num_pages }}.-->
+<!--        </p>-->
+<!--        {% endif %}-->
     </div>
 </div>
 {% endblock %}
