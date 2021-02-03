@@ -338,30 +338,7 @@ label{
 {% block content %}
 <div class="Body">
     <div style="width: 50%; margin-left: 25%; margin-top: 2%; align-items: center;" class="w3-content">
-        {% if user.is_authenticated %}
-        <button class="addWebsite" onclick="document.getElementById('addComment').style.display='block'">Add Comment</button>
-        <div id="addComment" class="modal">
-          <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
-            {% csrf_token %}
-            <div style="border-radius: 20px 20px 0px 0px;" class="container">
 
-              <label style="color: #888888; font-weight: bold;"><b>Description</b></label>
-              {% render_field comment_form.comment class="input" rows="auto" style="width: 100%" %}
-<!--              <textarea class="input" name="Description" rows="auto" cols="100"></textarea>-->
-
-            </div>
-
-            <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
-              <button type="button" onclick="document.getElementById('addComment').style.display='none'" class="cancelbtn">
-                  Cancel
-              </button>
-              <button class="button" type="submit" onclick="document.getElementById('addComment').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
-                  Add
-              </button>
-            </div>
-          </form>
-        </div>
-        {% endif %}
 
         <div class="mySlides2">
             <p class="most">{{ website.name }}</p>
@@ -380,6 +357,31 @@ label{
             {% endif %}
 
         </div>
+
+        {% if user.is_authenticated %}
+        <button class="addWebsite" onclick="document.getElementById('addComment').style.display='block'">Add Comment</button>
+        <div id="addComment" class="modal">
+          <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="" method="post">
+            {% csrf_token %}
+            <div style="border-radius: 20px 20px 0px 0px;" class="container">
+              <label style="color: #888888; font-weight: bold;"><b>Description</b></label>
+              {% render_field comment_form.comment class="input" rows="auto" style="width: 100%" %}
+<!--              <textarea class="input" name="Description" rows="auto" cols="100"></textarea>-->
+            </div>
+
+            <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
+              <button type="button" onclick="document.getElementById('addComment').style.display='none'" class="cancelbtn">
+                  Cancel
+              </button>
+              <button class="button" type="submit" onclick="document.getElementById('addComment').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
+                  Add
+              </button>
+            </div>
+          </form>
+        </div>
+        {% endif %}
+
+        {% if comments %}
         <div class="commentPlace" style="margin: 5% 0%;">
 
             {% for comment in comments %}
@@ -407,17 +409,28 @@ label{
                 </div>
             {% endfor %}
         </div>
-        <div>
-            <div class="pagination">
-              <a href="#">&laquo;</a>
-              <a href="#">1</a>
-              <a href="#" class="active">2</a>
-              <a href="#">3</a>
-              <a href="#">4</a>
-              <a href="#">5</a>
-              <a href="#">6</a>
-              <a href="#">&raquo;</a>
-            </div>
+        {% endif %}
+
+        <div class="pagination">
+            <span class="step-links">
+                    <a href="?page=1">&laquo; First</a>
+                {% if comments.has_previous %}
+                    <a href="?page={{ comments.previous_page_number }}" ><-</a>
+                {% endif %}
+
+                {% for i in comments.paginator.page_range %}
+                  {% if comments.number == i %}
+                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                  {% else %}
+                    <a href="?page={{ i }}">{{ i }}</a>
+                  {% endif %}
+                {% endfor %}
+
+                {% if comments.has_next %}
+                    <a href="?page={{ comments.next_page_number }}" >-></a>
+                {% endif %}
+                    <a href="?page={{ comments.paginator.num_pages }}">Last &raquo;</a>
+            </span>
         </div>
 
     </div>
