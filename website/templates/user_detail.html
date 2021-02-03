@@ -74,6 +74,33 @@ body {
     background-color: #333333;
 }
 
+.pagination {
+    padding: 20px;
+    margin-left: 15%;
+    display: inline-block;
+}
+
+.pagination a {
+  margin: 10px;
+  color: #FCA311;
+  background-color: #333333;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px ;
+}
+
+.pagination a.active {
+  background-color: #FCA311;
+  color: #333333;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #FCA311;
+    color: #333333;
+}
+
+
 .prev, .next {
   cursor: pointer;
   width: auto;
@@ -296,7 +323,8 @@ label{
 
 <div class="Body">
     {% if is_it_him %}
-        <form class="mySlides2">
+        <form class="mySlides2" method="post" action="?next={{request.path}}">
+            {% csrf_token %}
             <div class="container">
 
               <label class="Lable" for="uname" style="float: left; width: 47%;"><b>Username</b></label>
@@ -323,7 +351,7 @@ label{
 
 <!--              {% render_field user_form.password class="inpute" style="width: 47%; float: left;" placeholder="Enter Password" %}-->
 <!--              <input class="inpute" style="width: 47%; float: left" type="password" placeholder="Enter Password" name="psw" required>-->
-<!--              {% render_field user_form.password class="inpute" style="width: 47%; float: right;" placeholder="Enter Password Again" %}-->
+<!--              {% render_field user_form.password2 class="inpute" style="width: 47%; float: right;" placeholder="Enter Password Again" %}-->
 <!--              <input class="inpute" style="width: 47%; float: right" type="password" placeholder="Enter Password" name="psw2" required>-->
 
               <button style="width: 50%" class="button" type="submit">Save</button>
@@ -347,8 +375,9 @@ label{
         </div>
     {% endif %}
 
-    <div style="width: 50%; margin-left: 25%; padding-bottom: 50px;" class="w3-content">
+    {% if comments %}
 
+    <div style="width: 50%; margin-left: 25%; padding-bottom: 50px;" class="w3-content">
         <div class="commentPlace">
 
             {% for comment in comments %}
@@ -372,7 +401,9 @@ label{
                             <span class="fa fa-thumbs-up like2"></span>
                             <span class="fa fa-thumbs-down like2"></span>
                         {% endif %}
-                        <button class="trash" style="margin-left: 13%; position: absolute"><span class="fa fa-trash"></span></button>
+                        {% if is_it_him %}
+                            <button class="trash" style="margin-left: 13%; position: absolute"><span class="fa fa-trash"></span></button>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
@@ -380,23 +411,28 @@ label{
 
         <div class="pagination">
             <span class="step-links">
+                    <a href="?page=1">&laquo; First</a>
                 {% if comments.has_previous %}
-                    <a href="?page=1">&laquo; first</a>
-                    <a href="?page={{ comments.previous_page_number }}" style="width: 100px; ">previous</a>
+                    <a href="?page={{ comments.previous_page_number }}" ><-</a>
                 {% endif %}
+
+                {% for i in comments.paginator.page_range %}
+                  {% if comments.number == i %}
+                    <a class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></a>
+                  {% else %}
+                    <a href="?page={{ i }}">{{ i }}</a>
+                  {% endif %}
+                {% endfor %}
 
                 {% if comments.has_next %}
-                    <a href="?page={{ comments.next_page_number }}" style="width: 100px;">next</a>
-                    <a href="?page={{ comments.paginator.num_pages }}">last &raquo;</a>
+                    <a href="?page={{ comments.next_page_number }}" >-></a>
                 {% endif %}
+                    <a href="?page={{ comments.paginator.num_pages }}">Last &raquo;</a>
             </span>
-
-
         </div>
-        <p class="current most1" style="margin: 0;">
-            Page {{ comments.number }} of {{ comments.paginator.num_pages }}.
-        </p>
     </div>
+
+    {% endif %}
 </div>
 
 {% endblock %}
