@@ -392,11 +392,11 @@ label{
                         {{ comment.comment }}
                     </p>
                     <div class="likey">
-                        <p class="like-count">{{ comment.get_likes_count }}</p>
-                        <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
+                        <p class="like-count" id="like_count{{ comment.comment_id }}" >{{ comment.get_likes_count }}</p>
+                        <p class="dislike-count" id="dislike_count{{ comment.comment_id }}">{{ comment.get_dislikes_count }}</p>
                         {% if user.is_authenticated %}
-                            <button class="like"><span class="fa fa-thumbs-up"></span></button>
-                            <button class="like"><span class="fa fa-thumbs-down"></span></button>
+                            <button id="like_button" class="like" name="like" value="{{ comment.comment_id }}" ><span class="fa fa-thumbs-up"></span></button>
+                            <button id="dislike_button" class="like" name="dislike" value="{{ comment.comment_id }}"><span class="fa fa-thumbs-down"></span></button>
                         {% else %}
                             <span class="fa fa-thumbs-up like2"></span>
                             <span class="fa fa-thumbs-down like2"></span>
@@ -434,5 +434,45 @@ label{
 
     {% endif %}
 </div>
+
+
+<script>
+
+    $('button[name="like"]').click(function(){
+        let like_count_value = '#like_count' + $(this).attr('value');
+        let dislike_count_value = '#dislike_count' + $(this).attr('value')
+        $.ajax({
+            type: "POST",
+            url: "{% url 'like' %}",
+            data: {'comment': $(this).attr('value'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+            dataType: "json",
+            success: function(response) {
+                $(like_count_value).html("" + response.likes_count)
+                $(dislike_count_value).html("" + response.dislikes_count)
+                },
+            error: function() {
+                alert("Something went wrong! \n Please Try Again");
+            }
+        });
+    })
+
+    $('button[name="dislike"]').click(function(){
+            let like_count_value = '#like_count' + $(this).attr('value');
+            let dislike_count_value = '#dislike_count' + $(this).attr('value')
+            $.ajax({
+                type: "POST",
+                url: "{% url 'dislike' %}",
+                data: {'comment': $(this).attr('value'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                dataType: "json",
+                success: function(response) {
+                    $(like_count_value).html("" + response.likes_count)
+                    $(dislike_count_value).html("" + response.dislikes_count)
+                    },
+                error: function() {
+                    alert("Something went wrong! \n Please Try Again");
+                }});
+    })
+
+</script>
 
 {% endblock %}

@@ -157,7 +157,9 @@ class Comment(models.Model):
     modified = models.DateTimeField(auto_now_add=True, help_text='When was this page created?')
     comment = models.CharField(max_length=600)
     likes = models.PositiveIntegerField(default=0)
+    likes_table = models.ManyToManyField(User_in_built, related_name='likes')
     dislikes = models.PositiveIntegerField(default=0)
+    dislikes_table = models.ManyToManyField(User_in_built, related_name='dislikes')
     rate_to_web = models.PositiveSmallIntegerField(blank=True, null=True, )
 
     # Foreign Key used because replies can only have one comment, but  comments have multiple replies
@@ -171,11 +173,11 @@ class Comment(models.Model):
 
     def get_likes_count(self):
         """Returns comments like counts."""
-        return CommentLikes.objects.filter(comment=self.comment_id).count()
+        return self.likes_table.count()
 
     def get_dislikes_count(self):
         """Returns website Dislike counts."""
-        return CommentDislike.objects.filter(comment=self.comment_id).count()
+        return self.dislikes_table.count()
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this User."""

@@ -1,4 +1,5 @@
 # from django.http import Http404
+
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
@@ -13,6 +14,8 @@ from django.contrib.auth import login
 from django.contrib.auth import authenticate
 
 from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_protect
+
 from website.forms import SignUpForm
 from website.forms import AddComment
 from website.forms import UserForm
@@ -28,6 +31,16 @@ from website.forms import RenewLogin
 # from website.models import Industry
 # from website.models import AreaServed
 # from website.models import Founder
+
+from django.http import HttpResponse
+
+try:
+    from django.utils import simplejson as json
+except ImportError:
+    import json
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 
 # Create your views here.
@@ -322,6 +335,61 @@ def website_list_view(request):
 
     return render(request, 'website_list.html', context=context)
 
+
+# LIKE FUNCTION
+@login_required
+@require_POST
+@csrf_protect
+def like(request):
+    if request.method == 'POST':
+        user = request.user
+        comment_id = request.POST['comment']
+        comment = Comment.objects.get(comment_id=comment_id)
+
+        # user has already liked this comment
+        # remove like
+        if comment.likes_table.filter(id=user.id).exists():
+            comment.likes_table.remove(user)
+
+        # add a new like for a comment
+        else:
+            # user has already disliked this comment
+            # remove dislike
+            if comment.dislikes_table.filter(id=user.id).exists():
+                comment.dislikes_table.remove(user)
+
+            comment.likes_table.add(user)
+
+    ctx = {'likes_count': comment.get_likes_count(), 'dislikes_count': comment.get_dislikes_count()}
+    return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
+# DISLIKE FUNCTION
+@login_required
+@require_POST
+@csrf_protect
+def dislike(request):
+    if request.method == 'POST':
+        user = request.user
+        comment_id = request.POST['comment']
+        comment = Comment.objects.get(comment_id=comment_id)
+
+        # user has already disliked this comment
+        # remove dislike
+        if comment.dislikes_table.filter(id=user.id).exists():
+            comment.dislikes_table.remove(user)
+
+        # add a new dislike for a comment
+        else:
+            # user has already liked this comment
+            # remove like
+            if comment.likes_table.filter(id=user.id).exists():
+                comment.likes_table.remove(user)
+
+            comment.dislikes_table.add(user)
+
+    ctx = {'likes_count': comment.get_likes_count(), 'dislikes_count': comment.get_dislikes_count()}
+    return HttpResponse(json.dumps(ctx), content_type='application/json')
 
 # class WebsiteListView(generic.ListView):
 #     model = Website
