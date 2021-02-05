@@ -2,6 +2,7 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 import datetime
 from django.utils import timezone
@@ -29,6 +30,11 @@ from website.forms import RenewLogin
 # from website.models import AreaServed
 # from website.models import Founder
 
+comments_counts_user = 10
+comments_counts_website = 10
+websites_count_website_list = 3
+comments_counts_home = 10
+
 
 # Create your views here.
 def home(request):
@@ -39,29 +45,11 @@ def home(request):
 
     # websites = Website.objects.all()
 
-    recent_comments = Comment.objects.order_by('-modified')[:10]
+    # get recent comments to show new users as for example
+    recent_comments = Comment.objects.order_by('-modified')[:comments_counts_home]
 
-    liked_comments = Comment.objects.order_by('-likes')[:10]
-
-    # sign up form;
-    if request.method == 'POST':
-        sign_up_form = SignUpForm(request.POST)
-        # profile_form = ProfileForm(request.POST)
-        if sign_up_form.is_valid():
-            user_saved = sign_up_form.save()
-            user_saved.refresh_from_db()
-            user_saved.save()
-
-            username = sign_up_form.cleaned_data.get('username')
-            raw_password = sign_up_form.cleaned_data.get('password1')
-
-            user = authenticate(username=username, password=raw_password)
-            # profile = profile_form.user()
-            login(request, user)
-
-            return redirect('home')
-    else:
-        sign_up_form = SignUpForm()
+    # get most liked comments to show new users as for example
+    liked_comments = Comment.objects.order_by('-likes')[:comments_counts_home]
 
     # search form
     if request.method == 'POST':
@@ -69,9 +57,16 @@ def home(request):
         searched_websites_name = Website.objects.filter(name__icontains=search_text)
         searched_websites_domain_name = Website.objects.filter(website_domain_name__icontains=search_text)
         searched_websites = searched_websites_name | searched_websites_domain_name
+
+        paginator = Paginator(searched_websites, websites_count_website_list)
+
+        page_number = request.GET.get('page')
+        page_websites = paginator.get_page(page_number)
+        add_website = AddWebsite()
+
         context = {
-            'website_list': searched_websites,
-            'sign_up_form': sign_up_form,
+            'website_list': page_websites,
+            'add_website': add_website,
         }
         # redirect to website list page
         return render(request, 'website_list.html', context=context)
@@ -80,45 +75,24 @@ def home(request):
         'recent_comments': recent_comments,
         'is_logged': is_logged,
         'liked_comments': liked_comments,
-        'sign_up_form': sign_up_form,
     }
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'home.html', context=context)
 
 
 def website_detail(request, pk):
-    """View function for home page of site."""
+    """View function for website list page of site."""
 
-    # Available books (status = 'a')
+    # The website that user is looking for
     website = Website.objects.get(website_domain_name=pk)
 
-    # comments_s = reversed(Comment.objects.filter(website_id=pk, reply=None))
+    # all comments for website by order of last modified
     comments_s = Comment.objects.filter(website_id=pk, reply=None, ).order_by('-modified')
-    paginator = Paginator(comments_s, 10)
 
+    # comments paginator
+    paginator = Paginator(comments_s, comments_counts_website)
     page_number = request.GET.get('page')
     comments = paginator.get_page(page_number)
-
-    # create Account form
-    if request.method == 'POST':
-        sign_up_form = SignUpForm(request.POST)
-        # profile_form = ProfileForm(request.POST)
-        if sign_up_form.is_valid():
-            user_saved = sign_up_form.save()
-            user_saved.refresh_from_db()
-
-            user_saved.save()
-
-            username = sign_up_form.cleaned_data.get('username')
-            raw_password = sign_up_form.cleaned_data.get('password1')
-
-            user = authenticate(username=username, password=raw_password)
-            # profile = profile_form.user()
-            login(request, user)
-
-            return redirect(website.get_absolute_url())
-    else:
-        sign_up_form = SignUpForm()
 
     # add comment form
     if request.method == 'POST':
@@ -138,7 +112,6 @@ def website_detail(request, pk):
     context = {
         'website': website,
         'comments': comments,
-        'sign_up_form': sign_up_form,
         'comment_form': comment_form,
     }
 
@@ -147,38 +120,21 @@ def website_detail(request, pk):
 
 
 def user_detail(request, pk):
-    """View function for home page of site."""
+    """View function for user detail page of site."""
 
-    # Available books (status = 'a')
+    # The page of owner user
     user_view = User.objects.get(id=pk)
 
-    user_details = Profile.objects.get(user_id=user_view.id)
+    # The profile information of user
+    # user_details = Profile.objects.get(user_id=user_view.id)
 
+    # comments of user for websites
     p_comments = Comment.objects.filter(user_id=user_view.id, reply=None).order_by('-modified')
-    #
-    paginator = Paginator(p_comments, 10)  # Show 10 contacts per page.
+
+    # pagination of comments
+    paginator = Paginator(p_comments, comments_counts_user)  # Show 10 contacts per page.
     page_number = request.GET.get('page')
     comments = paginator.get_page(page_number)
-
-    # Sign up form
-    if request.method == 'POST':
-        sign_up_form = SignUpForm(request.POST)
-        # profile_form = ProfileForm(request.POST)
-        if sign_up_form.is_valid():
-            user_saved = sign_up_form.save()
-            user_saved.refresh_from_db()
-            user_saved.save()
-
-            username = sign_up_form.cleaned_data.get('username')
-            raw_password = sign_up_form.cleaned_data.get('password1')
-
-            user = authenticate(username=username, password=raw_password)
-            # profile = profile_form.user()
-            login(request, user)
-
-            return redirect('home')
-    else:
-        sign_up_form = SignUpForm()
 
     # check that the user is looking his own profile
     if request.user == user_view:
@@ -186,92 +142,37 @@ def user_detail(request, pk):
     else:
         is_it_him = False
 
-    # if it is user profile, user must can be edit his own data
+    # delete button
     if is_it_him:
         if request.method == 'POST':
-            # Create a form instance and populate it with data from the request (binding):
-            user_form = UserForm(request.POST, instance=request.user)
+            id_comment = request.POST['delete_button']
+            print(id_comment)
+            Comment.objects.filter(comment_id=id_comment).delete()
 
-            if user_form.is_valid():
-                user_form.save()
-                # return HttpResponseRedirect(reverse('user-detail', request.user.id))
-        else:
-            user_form = UserForm(instance=request.user)
-
-        context = {
-            'is_it_him': is_it_him,
-            'user_view': user_view,
-            'detail': user_details,
-            'comments': comments,
-            'user_form': user_form,
-            'sign_up_form': sign_up_form,
-        }
-    else:
-        context = {
-            'is_it_him': is_it_him,
-            'user_view': user_view,
-            'detail': user_details,
-            'comments': comments,
-            'sign_up_form': sign_up_form,
-        }
+    context = {
+        'is_it_him': is_it_him,
+        'user_view': user_view,
+        # 'detail': user_details,
+        'comments': comments,
+    }
 
     # Render the HTML template index.html with the data in the context variable
     return render(request, 'user_detail.html', context=context)
 
 
 def about(request):
-    if request.method == 'POST':
-        sign_up_form = SignUpForm(request.POST)
-        # profile_form = ProfileForm(request.POST)
-        if sign_up_form.is_valid():
-            user_saved = sign_up_form.save()
-            user_saved.refresh_from_db()
-            user_saved.save()
-
-            username = sign_up_form.cleaned_data.get('username')
-            raw_password = sign_up_form.cleaned_data.get('password1')
-
-            user = authenticate(username=username, password=raw_password)
-            # profile = profile_form.user()
-            login(request, user)
-
-            return redirect('home/websites')
-    else:
-        sign_up_form = SignUpForm()
-
-    context = {
-        'sign_up_form': sign_up_form,
-    }
-    return render(request, 'about-a.html', context=context)
+    """The About page of website that render static information"""
+    return render(request, 'about-a.html')
 
 
 def contact(request):
-    if request.method == 'POST':
-        sign_up_form = SignUpForm(request.POST)
-        # profile_form = ProfileForm(request.POST)
-        if sign_up_form.is_valid():
-            user_saved = sign_up_form.save()
-            user_saved.refresh_from_db()
-            user_saved.save()
-
-            username = sign_up_form.cleaned_data.get('username')
-            raw_password = sign_up_form.cleaned_data.get('password1')
-
-            user = authenticate(username=username, password=raw_password)
-            # profile = profile_form.user()
-            login(request, user)
-
-            return redirect('home/websites')
-    else:
-        sign_up_form = SignUpForm()
-
-    context = {
-        'sign_up_form': sign_up_form,
-    }
-    return render(request, 'contact.html', context=context)
+    """The contact page of website that render static information"""
+    return render(request, 'contact.html')
 
 
 def website_list_view(request):
+    """The website list page of website that shows all websites on siteOcation"""
+
     # add website form
     if request.method == 'POST':
         add_website = AddWebsite(request.POST)
@@ -285,42 +186,103 @@ def website_list_view(request):
             # saved_website.areaServed = AreaServed.objects.get(name='world wide')
             saved_website.save()
 
-            return redirect('home')
+            return redirect('websites')
     else:
         add_website = AddWebsite()
 
-    if request.method == 'POST':
-        sign_up_form = SignUpForm(request.POST)
-        # profile_form = ProfileForm(request.POST)
-        if sign_up_form.is_valid():
-            user_saved = sign_up_form.save()
-            user_saved.refresh_from_db()
-            user_saved.save()
-
-            username = sign_up_form.cleaned_data.get('username')
-            raw_password = sign_up_form.cleaned_data.get('password1')
-
-            user = authenticate(username=username, password=raw_password)
-            # profile = profile_form.user()
-            login(request, user)
-
-            return redirect('home/websites')
-    else:
-        sign_up_form = SignUpForm()
-
+    # all websites by order of last modifying to get more comments
     website = Website.objects.order_by('-modified')
-    paginator = Paginator(website, 10)
 
+    # pagination of websites
+    paginator = Paginator(website, websites_count_website_list)
     page_number = request.GET.get('page')
     page_websites = paginator.get_page(page_number)
 
     context = {
         'website_list': page_websites,
-        'sign_up_form': sign_up_form,
         'add_website': add_website,
     }
 
     return render(request, 'website_list.html', context=context)
+
+
+def create_account(request):
+    """The Create Account page of website."""
+
+    # if user not logged in can be create new account
+    if not request.user.is_authenticated:
+        if request.method == 'POST':
+            sign_up_form = SignUpForm(request.POST)
+            # profile_form = ProfileForm(request.POST)
+            if sign_up_form.is_valid():
+                user_saved = sign_up_form.save()
+                user_saved.refresh_from_db()
+                user_saved.save()
+
+                username = sign_up_form.cleaned_data.get('username')
+                raw_password = sign_up_form.cleaned_data.get('password1')
+
+                user = authenticate(username=username, password=raw_password)
+                # profile = profile_form.user()
+                login(request, user)
+
+                print(request.GET.get('next'))
+
+                return redirect(request.GET.get('next'))
+        else:
+            sign_up_form = SignUpForm()
+
+        context = {
+            'sign_up_form': sign_up_form,
+        }
+        return render(request, 'createAccount.html', context=context)
+
+    raise PermissionDenied
+
+
+@login_required
+def edit_profile(request):
+    """The Edit Account page of website."""
+    if request.method == 'POST':
+        # Create a form instance and populate it with data from the request (binding):
+        user_form = UserForm(request.POST, instance=request.user)
+
+        if user_form.is_valid():
+            user_form.save()
+
+            # making context to redirect the user to user detail page
+            # The page of owner user
+            user_view = request.user
+
+            # comments of user for websites
+            p_comments = Comment.objects.filter(user_id=user_view.id, reply=None).order_by('-modified')
+
+            # pagination of comments
+            paginator = Paginator(p_comments, comments_counts_user)  # Show 10 contacts per page.
+            page_number = request.GET.get('page')
+            comments = paginator.get_page(page_number)
+
+            # check that the user is looking his own profile
+            is_it_him = True
+
+            context = {
+                'is_it_him': is_it_him,
+                'user_view': user_view,
+                # 'detail': user_details,
+                'comments': comments,
+            }
+
+            # Render the HTML template index.html with the data in the context variable
+            return render(request, 'user_detail.html', context=context)
+
+    else:
+        user_form = UserForm(instance=request.user)
+
+    context = {
+            'user_form': user_form,
+        }
+
+    return render(request, 'editProfile.html', context=context)
 
 
 # class WebsiteListView(generic.ListView):
