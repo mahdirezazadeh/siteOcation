@@ -322,27 +322,26 @@ label{
 {% block content %}
 
 <div class="Body">
-    {% if is_it_him %}
-        <form class="mySlides2" method="post" action="?next={{request.path}}">
+        <form class="mySlides2" method="post" action="">
             {% csrf_token %}
             <div class="container">
 
               <label class="Lable" for="uname" style="float: left; width: 47%;"><b>Username</b></label>
               <label class="Lable" for="email" style="float: right; width: 47%;"><b>Email</b></label>
 
-              {% render_field user_form.username class="inpute" style="width: 47%; float: left;" placeholder="{{ user.username }}" %}
+              {% render_field user_form.username class="inpute" style="width: 47%; float: left;" placeholder="Enter your username" %}
 <!--              <input class="inpute" style="width: 47%; float: left" type="text" placeholder="{{ user_view.username }}" name="uname" required>-->
 
-              {% render_field user_form.email class="inpute" style="width: 47%; float: right;" placeholder="{{ user.email }}" %}
+              {% render_field user_form.email class="inpute" style="width: 47%; float: right;" placeholder="Enter your email" %}
 <!--              <input class="inpute" style="width: 47%; float: right" type="text" placeholder="{{ user_view.email }}" name="email" required>-->
 
               <label class="Lable" for="name" style="float: left; width: 47%;"><b>Name</b></label>
               <label class="Lable" for="LName" style="float: right; width: 47%;"><b>LastName</b></label><br>
 
-              {% render_field user_form.first_name class="inpute" style="width: 47%; float: left;" placeholder="{{ user.first_name }}" %}
+              {% render_field user_form.first_name class="inpute" style="width: 47%; float: left;" placeholder="Enter your first name" %}
 <!--              <input class="inpute" style="width: 47%; float: left" type="text" placeholder="{{ user_view.first_name }}" name="name" required>-->
 
-              {% render_field user_form.last_name class="inpute" style="width: 47%; float: right;" placeholder="{{ user.last_name }}" %}
+              {% render_field user_form.last_name class="inpute" style="width: 47%; float: right;" placeholder="Enter your last name" %}
 <!--              <input class="inpute" style="width: 47%; float: right" type="text" placeholder="{{ user_view.last_name }}" name="LName" required>-->
 
 
@@ -357,7 +356,6 @@ label{
               <button style="width: 50%" class="button" type="submit">Save</button>
             </div>
         </form>
-    {% endif %}
 </div>
 
 {% endblock %}
