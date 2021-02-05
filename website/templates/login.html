@@ -9,7 +9,7 @@
   <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="{% url 'Login' %}" method="post">
           {% csrf_token %}
         <div style="border-radius: 20px 20px 0px 0px;" class="container">
-          {% if form.errors %}
+          {% if errors %}
             <p style="color: red; text-align: center;">Your username and password didn't match. Please try again.</p>
           {% endif %}
           <label for="id_username"><b>Username</b></label>
@@ -20,9 +20,11 @@
           <input type="password" placeholder="Enter Password" name="password" autocomplete="current-password" required="" id="id_password">
 
         </div>
-        <button class="button" style="margin: 15px 10% 40px 10%; width: auto; float: right; font-size: medium;">
-             Login
-        </button>
+<!--        <a href="{{next}}">-->
+            <button class="button" style="margin: 15px 10% 40px 10%; width: auto; float: right; font-size: medium;">
+                 Login
+            </button>
+<!--        </a>-->
         <div style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;" class="container">
           <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
                 <a class="cancelbtn" href="{% url 'password_reset' %}">Forget password?</a>
