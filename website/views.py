@@ -285,6 +285,20 @@ def edit_profile(request):
     return render(request, 'editProfile.html', context=context)
 
 
+# def login_view(request):
+#     if request.method == 'POST':
+#         username = request.POST['username']
+#         password = request.POST['password']
+#         user = authenticate(username=username, password=password)
+#         if user is None:
+#             return render(request, 'login', {'errors': "Your username and password didn't match. Please try again."})
+#         else:
+#             login(request, user)
+#             return render(request.method.next)
+#
+#     return render(request, 'login.html', {'errors': "Your username and password didn't match. Please try again."})
+
+
 # class WebsiteListView(generic.ListView):
 #     model = Website
 #     template_name = 'website/website_list.html'
