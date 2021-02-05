@@ -6,15 +6,12 @@
 <!--    <p>Your username and password didn't match. Please try again.</p>-->
 <!--  {% endif %}-->
 
-  {% if next %}
     {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
+        <div style="border-radius: 20px 20px 20px 20px; margin-bottom: 30%" class="modal-content animate">
+            <p style="font-size:20px; color: red; text-align: center;">You are logged in!</p>
+        </div>
     {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
-  <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="{% url 'login' %}" method="post">
+      <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="{% url 'login' %}" method="post">
           {% csrf_token %}
         <div style="border-radius: 20px 20px 0px 0px;" class="container">
           {% if form.errors %}
@@ -28,23 +25,26 @@
           <input type="password" placeholder="Enter Password" name="password" autocomplete="current-password" required="" id="id_password">
 
         </div>
-      <button href="?next={{request.path}}" class="button" onclick="document.getElementById('login').style.display='block'"
-        style="margin: 15px 10% 40px 10%; width: auto; float: right; font-size: medium;">
-            Login
-        </button>
+<!--        <a href="next">-->
+            <button class="button" type="submit" value="login" style="margin: 15px 10% 40px 10%; width: auto; float: right; font-size: medium;">
+                Login
+            </button>
+<!--        </a>-->
         <div style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;" class="container">
           <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
               <a class="cancelbtn" href="{% url 'password_reset' %}">Forget password?</a>
+
                 <div style="float:right;">
-                    <button class="button" type="button" onclick="document.getElementById('createAccount').style.display='block' ,
-                        document.getElementById('login').style.display='none'" style="width: auto;">
+                    <a href="{% url 'create-account' %}">
+                    <button class="button" type="button" style="width: auto;">
                       Join SiteOcation
                     </button>
+                    </a>
                 </div>
                 </div>
         </div>
       </form>
-
-  {# Assumes you setup the password_reset view in your URLconf #}
+    {% endif %}
+<!--  {# Assumes you setup the password_reset view in your URLconf #}-->
 
 {% endblock %}
