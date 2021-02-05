@@ -1,5 +1,7 @@
 {% extends "main-a.html" %}
 
+{% load widget_tweaks %}
+
 {% block content %}
 
   {% if next %}
@@ -10,52 +12,78 @@
       <p>Please login to see this page.</p>
     {% endif %}
   {% endif %}
-  <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate" action="?next={{request.path}}" method="post">
+  {% if user.is_authenticated %}
+        <div style="border-radius: 20px 20px 20px 20px; margin-bottom: 30%" class="modal-content animate">
+            <p style="font-size:20px; color: red; text-align: center;">You are logged in!</p>
+        </div>
+  {% else %}
+  <form style="border-radius: 22px 22px 22px 22px;" class="modal-content animate"  method="post" action="">
         {% csrf_token %}
         <div style="border-radius: 20px 20px 0px 0px;" class="container">
 
           <label for="uname" style="float: left; width: 47%;"><b>Username</b></label>
           <label for="email" style="float: right; width: 47%;"><b>Email</b></label>
           {% render_field sign_up_form.username class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter Username" %}
-<!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Username" name="uname" required>-->
+          {% if sign_up_form.username.errors %}
+            <p style="color: red; text-align: center;">{% for error in sign_up_form.username.errors %} {{ error }}<br>{% endfor %}
+            </p>
+          {% endif %}
+            <!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Username" name="uname" required>-->
 
           {% render_field sign_up_form.email class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter Email" %}
-<!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Email" name="email" required>-->
+          {% if sign_up_form.email.errors %}
+            <p style="color: red; text-align: center;">{% for error in sign_up_form.email.errors %} {{ error }}<br>{% endfor %}
+            </p>
+          {% endif %}
+            <!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter Email" name="email" required>-->
 
           <label for="name" style="float: left; width: 47%;"><b>Name</b></label>
           <label for="LName" style="float: right; width: 47%;"><b>LastName</b></label><br>
 
           {% render_field sign_up_form.first_name class="input" style="margin-bottom: 28px; width: 47%; float: left" placeholder="Enter Name" %}
+          {% if sign_up_form.first_name.errors %}
+            <p style="color: red; text-align: center;">{% for error in sign_up_form.first_name.errors %} {{ error }}<br>{% endfor %}
+            </p>
+          {% endif %}
 <!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: left" type="text" placeholder="Enter Name" name="name" required>-->
           {% render_field sign_up_form.last_name class="input" style="margin-bottom: 28px; width: 47%; float: right" placeholder="Enter LastName" %}
+          {% if sign_up_form.last_name.errors %}
+            <p style="color: red; text-align: center;">{% for error in sign_up_form.last_name.errors %} {{ error }}<br>{% endfor %}
+            </p>
+          {% endif %}
 <!--          <input class="input" style="margin-bottom: 28px; width: 47%; float: right" type="text" placeholder="Enter LastName" name="LName" required>-->
 
           <label for="psw"><b>Password</b></label>
           {% render_field sign_up_form.password1 class="input" style="margin-bottom: 28px;" placeholder="Enter Password" %}
+          {% if sign_up_form.password1.errors %}
+            <p style="color: red; text-align: center;">{% for error in sign_up_form.password1.errors %} {{ error }}<br>{% endfor %}
+            </p>
+          {% endif %}
 <!--          <input class="input" style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>-->
 
           <label for="psw"><b>Confirm Password</b></label>
           {% render_field sign_up_form.password2 class="input" style="margin-bottom: 28px;" placeholder="Enter Password Again" %}
-<!--          <input class="input" style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>-->
+          {% if sign_up_form.password2.errors %}
+            <p style="color: red; text-align: center;">{% for error in sign_up_form.password2.errors %} {{ error }}<br>{% endfor %}
+            </p>
+          {% endif %}
+            <!--          <input class="input" style="margin-bottom: 28px;" type="password" placeholder="Enter Password" name="psw" required>-->
 
-          <button class="button" type="submit" onclick="document.getElementById('createAccount').style.display='none'"
-                  style="width: 100%; padding: 10px 18px;">
+          <button class="button" type="submit" style="width: 100%; padding: 10px 18px;">
               Create
           </button>
 
         </div>
 
-        <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc;">
-          <button type="button" onclick="document.getElementById('createAccount').style.display='none'" class="cancelbtn">
-              Cancel
-          </button>
-          <button class="button" type="button" onclick="document.getElementById('login').style.display='block' ,
-          document.getElementById('createAccount').style.display='none'" style="width: auto; padding: 10px 18px; float: right">
+        <div class="container" style="border-radius: 0px 0px 20px 20px; background-color:#dddcdc; text-align: center;">
+          <a href="{% url 'login' %}">
+          <button class="button" type="button" style="width: auto; padding: 10px 18px; float: left;">
               Already Have An Account?
           </button>
+          </a>
         </div>
       </form>
-
+  {% endif %}
   {# Assumes you setup the password_reset view in your URLconf #}
 
 {% endblock %}
