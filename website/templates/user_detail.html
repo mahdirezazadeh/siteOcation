@@ -335,7 +335,9 @@ label{
               <p class="Lable" for="name" style="float: right; width: 47%;"><b>Last Name</b></p>
               <p class="Lable" for="LName" style="color: #FCA311; float: right; width: 47%;"><b>{{ user_view.last_name }}</b></p>
               <p class="Lable" for="LName" style="color: #FCA311; float: left; width: 47%;"><b>{{ user_view.first_name }}</b></p>
+              <a href="{% url 'edit-profile' %}">
               <button style="width: 50%"  class="button" type="submit">Edit</button>
+              </a>
             </div>
         </div>
     {% else %}
@@ -373,18 +375,23 @@ label{
                         {{ comment.comment }}
                     </p>
                     <div class="likey">
-                        <p class="like-count">{{ comment.get_likes_count }}</p>
-                        <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
-                        {% if user.is_authenticated %}
-                            <button class="like"><span class="fa fa-thumbs-up"></span></button>
-                            <button class="like"><span class="fa fa-thumbs-down"></span></button>
-                        {% else %}
-                            <span class="fa fa-thumbs-up like2"></span>
-                            <span class="fa fa-thumbs-down like2"></span>
-                        {% endif %}
-                        {% if is_it_him %}
-                            <button class="trash" style="margin-left: 13%; position: absolute"><span class="fa fa-trash"></span></button>
-                        {% endif %}
+                        <form method="post" action="?next={{request.path}}">
+                            {% csrf_token %}
+                            <p class="like-count">{{ comment.get_likes_count }}</p>
+                            <p class="dislike-count">{{ comment.get_dislikes_count }}</p>
+                            {% if user.is_authenticated %}
+                                <button class="like"><span class="fa fa-thumbs-up"></span></button>
+                                <button class="like"><span class="fa fa-thumbs-down"></span></button>
+                            {% else %}
+                                <span class="fa fa-thumbs-up like2"></span>
+                                <span class="fa fa-thumbs-down like2"></span>
+                            {% endif %}
+                            {% if is_it_him %}
+                                <button value="{{ comment.comment_id }}" name="delete_button" onclick="return confirm('Are you sure you want to delete this comment?')" class="trash" style="margin-left: 13%; position: absolute">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                            </form>
+                            {% endif %}
                     </div>
                 </div>
             {% endfor %}
