@@ -43,7 +43,6 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
-
 comments_counts_user = 10
 comments_counts_website = 10
 websites_count_website_list = 3
@@ -159,9 +158,12 @@ def user_detail(request, pk):
     # delete button
     if is_it_him:
         if request.method == 'POST':
-            id_comment = request.POST['delete_button']
-            print(id_comment)
-            Comment.objects.filter(comment_id=id_comment).delete()
+            try:
+                id_comment = request.POST['delete_button']
+                print(id_comment)
+                Comment.objects.filter(comment_id=id_comment).delete()
+            except:
+                print('the user did not press delete button')
 
     context = {
         'is_it_him': is_it_him,
@@ -293,8 +295,8 @@ def edit_profile(request):
         user_form = UserForm(instance=request.user)
 
     context = {
-            'user_form': user_form,
-        }
+        'user_form': user_form,
+    }
 
     return render(request, 'editProfile.html', context=context)
 
@@ -337,6 +339,12 @@ def like(request):
 
             comment.likes_table.add(user)
 
+    likes_c = comment.get_likes_count()
+    dislikes_c = comment.get_dislikes_count()
+
+    Comment.objects.filter(pk=comment_id).update(likes=likes_c)
+    Comment.objects.filter(pk=comment_id).update(dislikes=dislikes_c)
+
     ctx = {'likes_count': comment.get_likes_count(), 'dislikes_count': comment.get_dislikes_count()}
     return HttpResponse(json.dumps(ctx), content_type='application/json')
 
@@ -365,6 +373,12 @@ def dislike(request):
 
             comment.dislikes_table.add(user)
 
+    likes_c = comment.get_likes_count()
+    dislikes_c = comment.get_dislikes_count()
+
+    Comment.objects.filter(pk=comment_id).update(likes=likes_c)
+    Comment.objects.filter(pk=comment_id).update(dislikes=dislikes_c)
+
     ctx = {'likes_count': comment.get_likes_count(), 'dislikes_count': comment.get_dislikes_count()}
     return HttpResponse(json.dumps(ctx), content_type='application/json')
 
@@ -372,18 +386,18 @@ def dislike(request):
 #     model = Website
 #     template_name = 'website/website_list.html'
 #     paginate_by = 3
-    # context_object_name = 'my_book_list'  # your own name for the list as a template variable
-    # queryset = Book.objects.filter(title__icontains='war')[:5]  # Get 5 books containing the title war
-    # template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location
+# context_object_name = 'my_book_list'  # your own name for the list as a template variable
+# queryset = Book.objects.filter(title__icontains='war')[:5]  # Get 5 books containing the title war
+# template_name = 'books/my_arbitrary_template_name_list.html'  # Specify your own template name/location
 
-    # def get_queryset(self):
-    #     return Book.objects.filter(title__icontains='war')[:5]  # Get 5 books containing the title war
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation first to get the context
-    #     context = super(BookListView, self).get_context_data(**kwargs)
-    #     # Create any data and add it to the context
-    #     context['some_data'] = 'This is just some data'
-    #     return context
+# def get_queryset(self):
+#     return Book.objects.filter(title__icontains='war')[:5]  # Get 5 books containing the title war
+# def get_context_data(self, **kwargs):
+#     # Call the base implementation first to get the context
+#     context = super(BookListView, self).get_context_data(**kwargs)
+#     # Create any data and add it to the context
+#     context['some_data'] = 'This is just some data'
+#     return context
 
 
 # class WebisteDetailView(generic.ListView):
@@ -394,23 +408,23 @@ def dislike(request):
 #         self.website = get_object_or_404(Website, name=self.kwargs['website_domain_name'])
 #         return Website.objects.filter(website_domain_name=self.website)
 
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation first to get a context
-    #     context = super().get_context_data(**kwargs)
-    #     # Add in the publisher
-    #     context['website_domain_name'] = self.website
-    #     return context
-    # def as_view(self, pk):
-    #     queryset = Website.objects.filter(publisher__name='ACME Publishing')
-    #     return queryset
-    #
-    # def book_detail_view(self, primary_key):
-    #     try:
-    #         website = Website.objects.get(pk=primary_key)
-    #     except Website.DoesNotExist:
-    #         raise Http404('website does not exist')
-    #
-    #     return render(self, "website/website_detail.html", context={'website': website})
+# def get_context_data(self, **kwargs):
+#     # Call the base implementation first to get a context
+#     context = super().get_context_data(**kwargs)
+#     # Add in the publisher
+#     context['website_domain_name'] = self.website
+#     return context
+# def as_view(self, pk):
+#     queryset = Website.objects.filter(publisher__name='ACME Publishing')
+#     return queryset
+#
+# def book_detail_view(self, primary_key):
+#     try:
+#         website = Website.objects.get(pk=primary_key)
+#     except Website.DoesNotExist:
+#         raise Http404('website does not exist')
+#
+#     return render(self, "website/website_detail.html", context={'website': website})
 
 #
 # @login_required
