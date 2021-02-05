@@ -251,6 +251,31 @@ label{
     height: auto;
 }
 
+.pagination {
+    padding: 20px;
+    display: inline-block;
+}
+
+.pagination a {
+  margin: 10px;
+  color: #FCA311;
+  background-color: #333333;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px ;
+}
+
+.pagination a.active {
+  background-color: #FCA311;
+  color: #333333;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #FCA311;
+    color: #333333;
+}
+
 .Header{
     font-family: 'Poppins';
     padding: -10px 0px 10px 10px;
