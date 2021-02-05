@@ -1,10 +1,5 @@
-body {
-    height: auto;
-    background: url(../../media/image/BackGround/BG.png) repeat fixed center;
-    font-family: 'Poppins', sans-serif; margin: 0;
-    margin: 0px;
-    background-color: #f1f1f1;
-}
+{% load static %}
+
 
 .like{
   font-size: 25px;
@@ -27,16 +22,17 @@ body {
 }
 
 .user{
+    width: 12%;
+    heght: 12%;
+    border-radius: 100%;
     cursor: pointer;
-    float: left;
-    margin-left: 4%;
-    margin-top: 4%;
+    float: right;
+    margin-right: 3%;
+    margin-top: -2%;
 }
 
 .userName{
     cursor: default;
-    margin-left: 14%;
-    padding-top: 4%;
     font-weight: bold;
 }
 
@@ -76,6 +72,25 @@ body {
   text-decoration: none;
 }
 
+.addWebsite{
+    color: #FCA311;
+    font-weight: bold;
+    border-radius: 25px;
+    background-color: #333333;
+    border: none;
+    cursor: pointer;
+    width: 40%;
+    margin-left: 30%;
+    margin-bottom: 3%;
+    padding: 10px 5px;
+}
+
+.addWebsite:hover{
+    font-weight: bold;
+    color: #333333;
+    background-color: #FCA311;
+}
+
 .prev{
     float: left;
 }
@@ -109,6 +124,7 @@ body {
 }
 
 .mySlides{
+    margin-top: 2%;
     padding: 15px 10px;
     border-radius: 25px;
     text-align: center;
@@ -116,11 +132,11 @@ body {
 }
 
 .mySlides2{
+    margin-top: 50px;
     padding: 15px 10px;
     border-radius: 25px;
     text-align: center;
     background-color: #333333;
-    margin: 5% 0px 0px 0px;
 }
 
 .website-tag-comment{
@@ -140,12 +156,16 @@ body {
     color: #888888;
 }
 
+{% block commentplace %}
+
 .commentPlace{
     background-color: #6d6d6d;
     border-radius: 20px;
     margin: 5% 24%;
     padding: 1% 3%;
 }
+{% endblock %}
+
 
 .searchPic{
     max-width: 50px;
@@ -163,7 +183,6 @@ body {
   border: none;
   cursor: pointer;
   width: 100%;
-  font-family: 'Poppins';
 }
 
 button:link, button:visited {
@@ -227,10 +246,34 @@ label{
 }
 
 .logo{
-    margin: 15px 10px 15px 20px;
-    padding-left: 10px;
+    margin: 15px 0px 25px 6%;
     width: 19%;
     height: auto;
+}
+
+.pagination {
+    padding: 20px;
+    display: inline-block;
+}
+
+.pagination a {
+  margin: 10px;
+  color: #FCA311;
+  background-color: #333333;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+  border: 1px ;
+}
+
+.pagination a.active {
+  background-color: #FCA311;
+  color: #333333;
+}
+
+.pagination a:hover:not(.active) {
+    background-color: #FCA311;
+    color: #333333;
 }
 
 .Header{
@@ -249,12 +292,12 @@ label{
 }
 
 .Footer{
-    font-family: 'Poppins';
     padding: -10px 0px 10px 10px;
     background-color: #d6d6d6;
     height: 20%;
     width: 100%;
-    margin: 0px;
+    margin-top: 19%;
+    margin-left: 0;
 }
 
 .developers{
@@ -268,14 +311,12 @@ label{
 .container {
     position: relative;
   padding: 16px;
-    background-color: #f1f1f1;
 }
 
 .modal {
-    font-family: 'Poppins';
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -289,7 +330,7 @@ label{
 .modal-content {
     font-family: 'Poppins';
   box-shadow: 5px 5px #888888;
-  background-color: #fefefe;
+  background-color: #A2A1A1;
   margin: 5% auto 15% auto;
   border: 1px solid #888;
   width: 40%;
@@ -309,23 +350,21 @@ label{
   color: #010101;
 }
 
-.input{
+input{
     background-color: #f1f1f1;
     color: #FCA311;
     margin-bottom: 28px;
     border-radius: 25px;
 }
 
-.input[type=text]::placeholder , .input[type=password]::placeholder {
+.input[type=text]::placeholder , .input[type=password]::placeholder, .input[type=email]::placeholder {
   background-color: #f1f1f1;
   color: #FCA311;
-  font-weight: bold;
 }
 
-input[type=text], input[type=password] {
+input[type=text], input[type=password] ,input[type=email]{
     background-color: #f1f1f1;
   color: #FCA311;
-  font-weight: bold;
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -333,6 +372,19 @@ input[type=text], input[type=password] {
   border: 1px solid #ccc;
   box-sizing: border-box;
 }
+
+.cancelbtn {
+    float: left;
+      font-size: medium;
+      text-decoration: none;
+    background-color: #ffffff;
+      color: #FCA311;
+  }
+  .cancelbtn:hover{
+      text-decoration: none;
+      color: #ffffff;
+      background-color: #FCA311;
+  }
 
 @-webkit-keyframes animatezoom {
   from {-webkit-transform: scale(0)}
@@ -348,8 +400,5 @@ input[type=text], input[type=password] {
   span.psw {
      display: block;
      float: none;
-  }
-  .cancelbtn {
-     width: 100%;
   }
 }

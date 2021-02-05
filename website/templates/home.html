@@ -8,7 +8,7 @@
 <div class="Body">
     <form method="post">
         {% csrf_token %}
-        <input class="input" style="width: 50%; margin-left: 25%;" type="text" placeholder="Search For Website" name="input_search">
+        <input class="input" style="width: 50%; margin-left: 25%; margin-top: 2%" type="text" placeholder="Search For Website" name="input_search">
         <button class="searchBtn" type="submit"><img class="searchPic" src="{% static 'images/search.png' %}"></button>
     </form>
     <div class="commentPlace" style="padding: 1.25% 0;">

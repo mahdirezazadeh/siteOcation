@@ -76,7 +76,6 @@ body {
 
 .pagination {
     padding: 20px;
-    margin-left: 15%;
     display: inline-block;
 }
 
@@ -99,7 +98,6 @@ body {
     background-color: #FCA311;
     color: #333333;
 }
-
 
 .prev, .next {
   cursor: pointer;
@@ -323,40 +321,23 @@ label{
 
 <div class="Body">
     {% if is_it_him %}
-        <form class="mySlides2" method="post" action="?next={{request.path}}">
-            {% csrf_token %}
+        <div class="mySlides2">
             <div class="container">
 
-              <label class="Lable" for="uname" style="float: left; width: 47%;"><b>Username</b></label>
-              <label class="Lable" for="email" style="float: right; width: 47%;"><b>Email</b></label>
+              <p class="Lable" for="uname" style="float: left; width: 47%;"><b>Username</b></p>
+              <p class="Lable" for="email" style="float: right; width: 47%;"><b>Email</b></p>
+              <p class="Lable" for="uname" style="color: #FCA311; float: left; width: 47%;"><b>{{ user_view.username }}</b></p>
+              <p class="Lable" for="email" style="color: #FCA311; float: right; width: 47%;"><b>{{ user_view.email }}</b></p>
 
-              {% render_field user_form.username class="inpute" style="width: 47%; float: left;" placeholder="{{ user.username }}" %}
-<!--              <input class="inpute" style="width: 47%; float: left" type="text" placeholder="{{ user_view.username }}" name="uname" required>-->
-
-              {% render_field user_form.email class="inpute" style="width: 47%; float: right;" placeholder="{{ user.email }}" %}
-<!--              <input class="inpute" style="width: 47%; float: right" type="text" placeholder="{{ user_view.email }}" name="email" required>-->
-
-              <label class="Lable" for="name" style="float: left; width: 47%;"><b>Name</b></label>
-              <label class="Lable" for="LName" style="float: right; width: 47%;"><b>LastName</b></label><br>
-
-              {% render_field user_form.first_name class="inpute" style="width: 47%; float: left;" placeholder="{{ user.first_name }}" %}
-<!--              <input class="inpute" style="width: 47%; float: left" type="text" placeholder="{{ user_view.first_name }}" name="name" required>-->
-
-              {% render_field user_form.last_name class="inpute" style="width: 47%; float: right;" placeholder="{{ user.last_name }}" %}
-<!--              <input class="inpute" style="width: 47%; float: right" type="text" placeholder="{{ user_view.last_name }}" name="LName" required>-->
-
-
-<!--              <label class="Lable" for="psw" style="float: left; width: 47%;"><b>New Password</b></label>-->
-<!--              <label class="Lable" for="psw" style="float: right; width: 47%;"><b>Confirm Password</b></label>-->
-
-<!--              {% render_field user_form.password class="inpute" style="width: 47%; float: left;" placeholder="Enter Password" %}-->
-<!--              <input class="inpute" style="width: 47%; float: left" type="password" placeholder="Enter Password" name="psw" required>-->
-<!--              {% render_field user_form.password2 class="inpute" style="width: 47%; float: right;" placeholder="Enter Password Again" %}-->
-<!--              <input class="inpute" style="width: 47%; float: right" type="password" placeholder="Enter Password" name="psw2" required>-->
-
-              <button style="width: 50%" class="button" type="submit">Save</button>
+              <p class="Lable" for="name" style="float: left; width: 47%;"><b>First Name</b></p>
+              <p class="Lable" for="name" style="float: right; width: 47%;"><b>Last Name</b></p>
+              <p class="Lable" for="LName" style="color: #FCA311; float: right; width: 47%;"><b>{{ user_view.last_name }}</b></p>
+              <p class="Lable" for="LName" style="color: #FCA311; float: left; width: 47%;"><b>{{ user_view.first_name }}</b></p>
+              <a href="{% url 'edit-profile' %}">
+              <button style="width: 50%"  class="button" type="submit">Edit</button>
+              </a>
             </div>
-        </form>
+        </div>
     {% else %}
         <div class="mySlides2">
             <div class="container">
@@ -377,7 +358,7 @@ label{
 
     {% if comments %}
 
-    <div style="width: 50%; margin-left: 25%; padding-bottom: 50px;" class="w3-content">
+    <div style="width: 50%; margin-left: 25%; padding-bottom: 50px; text-align: center;" class="w3-content">
         <div class="commentPlace">
 
             {% for comment in comments %}
@@ -392,18 +373,23 @@ label{
                         {{ comment.comment }}
                     </p>
                     <div class="likey">
-                        <p class="like-count" id="like_count{{ comment.comment_id }}" >{{ comment.get_likes_count }}</p>
-                        <p class="dislike-count" id="dislike_count{{ comment.comment_id }}">{{ comment.get_dislikes_count }}</p>
-                        {% if user.is_authenticated %}
-                            <button id="like_button" class="like" name="like" value="{{ comment.comment_id }}" ><span class="fa fa-thumbs-up"></span></button>
-                            <button id="dislike_button" class="like" name="dislike" value="{{ comment.comment_id }}"><span class="fa fa-thumbs-down"></span></button>
-                        {% else %}
-                            <span class="fa fa-thumbs-up like2"></span>
-                            <span class="fa fa-thumbs-down like2"></span>
-                        {% endif %}
-                        {% if is_it_him %}
-                            <button class="trash" style="margin-left: 13%; position: absolute"><span class="fa fa-trash"></span></button>
-                        {% endif %}
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <p class="like-count" id="like_count{{ comment.comment_id }}" >{{ comment.get_likes_count }}</p>
+                            <p class="dislike-count" id="dislike_count{{ comment.comment_id }}">{{ comment.get_dislikes_count }}</p>
+                            {% if user.is_authenticated %}
+                                <button id="like_button" class="like" name="like" value="{{ comment.comment_id }}" ><span class="fa fa-thumbs-up"></span></button>
+                                <button id="dislike_button" class="like" name="dislike" value="{{ comment.comment_id }}"><span class="fa fa-thumbs-down"></span></button>
+                            {% else %}
+                                <span class="fa fa-thumbs-up like2"></span>
+                                <span class="fa fa-thumbs-down like2"></span>
+                            {% endif %}
+                            {% if is_it_him %}
+                                <button value="{{ comment.comment_id }}" name="delete_button" onclick="return confirm('Are you sure you want to delete this comment?')" class="trash" style="margin-left: 13%; position: absolute">
+                                    <span class="fa fa-trash"></span>
+                                </button>
+                            {% endif %}
+                        </form>
                     </div>
                 </div>
             {% endfor %}
