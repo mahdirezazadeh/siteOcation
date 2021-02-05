@@ -11,8 +11,8 @@
         pip install django-widget-tweaks
   
 ## Run
-    In siteOcation main directory orun below command in command line or terminal
+    In siteOcation main directory run below command in command line or terminal
         python3 manage.py runserver
 
-    Now by using your browser go http://127.0.0.1:8000/ then it must show you home page of website
+    Now by using your browser go http://127.0.0.1:8000/ and done!
   
