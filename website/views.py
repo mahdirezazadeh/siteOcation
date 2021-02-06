@@ -1,16 +1,11 @@
-# from django.http import Http404
-
 from django.core.paginator import Paginator
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
-import datetime
 from django.utils import timezone
 
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-from django.contrib.auth.decorators import login_required, permission_required
+# from django.http import HttpResponse
+# from django.urls import reverse
 from django.contrib.auth import login
 from django.contrib.auth import authenticate
 
@@ -22,16 +17,9 @@ from website.forms import AddComment
 from website.forms import UserForm
 from website.forms import AddWebsite
 
-from django.views import generic
+# from django.views import generic
 from website.models import Website
-from website.models import Profile
 from website.models import Comment
-from website.models import AreaServed
-
-from website.forms import RenewLogin
-# from website.models import Industry
-# from website.models import AreaServed
-# from website.models import Founder
 
 from django.http import HttpResponse
 
@@ -43,10 +31,19 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
-comments_counts_user = 10
-comments_counts_website = 10
-websites_count_website_list = 3
-comments_counts_home = 10
+# imports to deploy django on github
+import git
+from django.views.decorators.csrf import csrf_exempt
+# the below imports needed but imported before for another purpose
+# from django.shortcuts import render
+# from django.http import HttpResponse
+
+
+# constant values
+comments_counts_user = 5
+comments_counts_website = 5
+websites_count_website_list = 5
+comments_counts_home = 5
 
 
 # Create your views here.
@@ -381,6 +378,26 @@ def dislike(request):
 
     ctx = {'likes_count': comment.get_likes_count(), 'dislikes_count': comment.get_dislikes_count()}
     return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
+@csrf_exempt
+def update(request):
+    """The view for github initializing"""
+
+    if request.method == "POST":
+        '''
+        pass the path of the diectory where your project will be 
+        stored on PythonAnywhere in the git.Repo() as parameter.
+        Here the name of my directory is "test.pythonanywhere.com"
+        '''
+        repo = git.Repo("test.pythonanywhere.com/")
+        origin = repo.remotes.origin
+
+        origin.pull()
+
+        return HttpResponse("Updated code on PythonAnywhere")
+    else:
+        return HttpResponse("Couldn't update the code on PythonAnywhere")
 
 # class WebsiteListView(generic.ListView):
 #     model = Website

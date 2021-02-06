@@ -62,3 +62,7 @@ urlpatterns += [
     re_path(r'^dislike/$', website_veiws.dislike, name='dislike'),
     re_path(r'^like/$', website_veiws.like, name='like')
 ]
+
+urlpatterns += [
+    path("update_server/", website_veiws.update, name="update"),
+]
