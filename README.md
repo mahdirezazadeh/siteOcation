@@ -1,8 +1,8 @@
 # siteOcation
 
 ## Requirements
-    Python (3.8 or highte)
-    Django (3.1 or highter)
+    Python (3.8 or higher)
+    Django (3.1 or higher)
     We highly recommend and only officially support the latest patch release of each Python and Django series.
 
 ## Installation
